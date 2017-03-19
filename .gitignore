@@ -10,3 +10,11 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# 排除不上传的文件夹
+WebRoot\WEB-INF\lib
+WebRoot\WEB-INF\classes
+WebRoot\backup\data
+WebRoot\backup\tmp
+.idea
+joffice.iml
