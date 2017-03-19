@@ -7,12 +7,15 @@ package com.htsoft.oa.service.business;
 
 import com.htsoft.core.service.BaseService;
 import com.htsoft.oa.model.business.Business;
+
 import java.util.List;
 
 public interface BusinessService extends BaseService<Business> {
-	void reportExcel(List<Business> var1, String var2);
+    void reportExcel(List<Business> businessList, String savePath);
 
-	Business getLastBusiness();
+    Business getLastBusiness();
 
-	void reportMyExcel(List<Business> var1, String var2);
+    void reportMyExcel(List<Business> businessList, String savePath);
+
+    String getNewBaogaoId(int year, int month);
 }

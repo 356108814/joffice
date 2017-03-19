@@ -5,9 +5,9 @@ import com.htsoft.oa.model.realty.Realty;
 import java.util.List;
 
 public interface RealtyService extends BaseService<Realty> {
-    void reportExcel(List<Realty> var1, String var2);
+    void reportExcel(List<Realty> realtyList, String savePath);
 
     Realty getLastBusiness();
 
-    void reportMyExcel(List<Realty> var1, String var2);
+    void reportMyExcel(List<Realty> realtyList, String savePath);
 }

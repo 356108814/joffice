@@ -171,7 +171,7 @@ public class RealtyAction extends BaseAction {
     public String getNewBaogaoId() {
         String newBaogaoId = "";
         String baogaoId = "";
-        String template = "穗佰泰房评字(Y)第0M0XT号";
+        String template = "穗和顺房评字(Y)第0M0XT号";
         boolean index = false;
         JSONSerializer json = JsonUtil.getJSONSerializer();
         Realty realty = this.realtyService.getLastBusiness();

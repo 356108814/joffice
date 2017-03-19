@@ -5,13 +5,14 @@
 
 package com.htsoft.oa.dao.business;
 
-import com.htsoft.core.dao.BaseDao;
 import com.htsoft.core.web.paging.PagingBean;
+import com.htsoft.oa.dao.BaseDao;
 import com.htsoft.oa.model.business.Business;
+
 import java.util.List;
 
 public interface BusinessDao extends BaseDao<Business> {
-	List<Business> findBySearch(String var1, PagingBean var2);
+    List<Business> findBySearch(String var1, PagingBean var2);
 
-	Long getLastBusinessId();
+    Long getLastBusinessId();
 }
