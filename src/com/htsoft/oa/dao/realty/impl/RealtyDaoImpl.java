@@ -1,16 +1,17 @@
 package com.htsoft.oa.dao.realty.impl;
 
-import com.htsoft.core.dao.impl.BaseDaoImpl;
 import com.htsoft.core.web.paging.PagingBean;
+import com.htsoft.oa.dao.BaseDaoImpl;
 import com.htsoft.oa.dao.realty.RealtyDao;
 import com.htsoft.oa.model.realty.Realty;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.springframework.orm.hibernate3.HibernateCallback;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RealtyDaoImpl extends BaseDaoImpl<Realty> implements RealtyDao {
     public RealtyDaoImpl() {

@@ -1,11 +1,7 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package com.htsoft.oa.service.business.impl;
 
 import com.dream.util.ExportUtil;
+import com.dream.util.StringUtil;
 import com.htsoft.core.service.impl.BaseServiceImpl;
 import com.htsoft.oa.dao.business.BusinessDao;
 import com.htsoft.oa.model.business.Business;
@@ -13,7 +9,6 @@ import com.htsoft.oa.service.business.BusinessService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -21,7 +16,7 @@ import java.util.Calendar;
 import java.util.List;
 
 public class BusinessServiceImpl extends BaseServiceImpl<Business> implements BusinessService {
-    private static final Log logger= LogFactory.getLog(BusinessServiceImpl.class);
+    private static final Log logger = LogFactory.getLog(BusinessServiceImpl.class);
     private BusinessDao businessDao;
 
     public BusinessServiceImpl(BusinessDao dao) {
@@ -36,12 +31,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
             String filedString = "businessId,myid,nhrq,baobeiId,baogaoId,xmmc,weituo,pgdx,gjmd,gjff,pgzz,ydje,kpje,dzje,zjbl,ssje,jjmc,ywzb,zbgzl,ywzl,zlgzl,xckc,kcgzl,cprq,bgr,gzrq,cbgrq,bgfs,qzpgs,sfrq,skfs,ywht,sfyfzjf,dgwcsm,beizhu1,beizhu2,username";
             ExportUtil.ExportXls(businessList, out, filedString, e);
             out.close();
-        } catch (FileNotFoundException var6) {
-            var6.printStackTrace();
-        } catch (IOException var7) {
-            var7.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
     }
 
     public Business getLastBusiness() {
@@ -56,10 +48,8 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
             String filedString = "businessId,myid,nhrq,baogaoId,xmmc,weituo,pgdx,gjmd,gjff,pgzz,dzje,jjmc,ywzb,zbgzl,ywzl,zlgzl,xckc,kcgzl,cprq,bgr,gzrq,cbgrq,bgfs,qzpgs,sfrq,ywht,dgwcsm,beizhu1,username";
             ExportUtil.ExportXls(businessList, out, filedString, e);
             out.close();
-        } catch (FileNotFoundException var6) {
-            var6.printStackTrace();
-        } catch (IOException var7) {
-            var7.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -72,7 +62,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
      */
     @Override
     public String getNewBaogaoId(int year, int month) {
-        String baogaoId = "";
+        String baogaoId;
+
+        int baseCount = 0;
         String tpl = "穗和顺资评字(Y)第0MI号";
         if(year == 0) {
             // 默认使用当前时间
@@ -80,14 +72,18 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
             year = now.get(Calendar.YEAR);
             month = now.get(Calendar.MONTH) + 1;
         }
+        // 解决拿号顺序不连续问题，避免号重复。如：序号到38了，但是实际只拿了24个
+        // TODO 基数要根据实际情况修改，只有2017才需要加
+        if(year == 2017) {
+            baseCount = 4;
+        }
         // 拿号日期内的报告总数
         String hql = "select count(*) from Business as b where b.nhrq LIKE ?";
         Object object = this.businessDao.getUniqueResult(hql, new Object[]{"%" + year+"%"});
-        int total = ((BigInteger)object).intValue();
-        System.out.println(total);
+        int count = ((BigInteger)object).intValue();
         baogaoId = tpl.replaceAll("Y", String.valueOf(year));
-        baogaoId = baogaoId.replaceAll("M", String.valueOf(month));
-        baogaoId = baogaoId.replaceAll("I", String.valueOf(total + 1));
+        baogaoId = baogaoId.replaceAll("M", StringUtil.lfill(month, 2));
+        baogaoId = baogaoId.replaceAll("I", StringUtil.lfill(baseCount + count + 1, 4));
         return baogaoId;
     }
 }

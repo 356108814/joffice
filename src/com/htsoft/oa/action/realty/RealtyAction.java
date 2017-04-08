@@ -17,6 +17,10 @@ import com.htsoft.oa.model.realty.Realty;
 import com.htsoft.oa.model.system.AppUser;
 import com.htsoft.oa.service.realty.RealtyService;
 import flexjson.JSONSerializer;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -168,50 +172,75 @@ public class RealtyAction extends BaseAction {
         return "success";
     }
 
+//    public String getNewBaogaoId() {
+//        String newBaogaoId = "";
+//        String baogaoId = "";
+//        String template = "穗和顺房评字(Y)第0M0XT号";
+//        boolean index = false;
+//        JSONSerializer json = JsonUtil.getJSONSerializer();
+//        Realty realty = this.realtyService.getLastBusiness();
+//        if(realty != null) {
+//            baogaoId = realty.getBaogaoId();
+//        }
+//
+//        if(baogaoId != "") {
+//            int index1 = Integer.parseInt(baogaoId.substring(17, 20)) + 1;
+//            Calendar cal = Calendar.getInstance();
+//            int year = cal.get(1);
+//            int month = cal.get(2) + 1;
+//            String ms = "";
+//            String indexs = "";
+//            if(month < 10) {
+//                ms = "0" + month;
+//            } else {
+//                ms = "" + month;
+//            }
+//
+//            if(index1 < 10) {
+//                indexs = indexs + "0" + index1;
+//            } else {
+//                indexs = String.valueOf(index1);
+//            }
+//
+//            if(index1 < 100) {
+//                indexs = "0" + indexs;
+//            } else {
+//                indexs = String.valueOf(index1);
+//            }
+//
+//            if(baogaoId.indexOf("NX1") != -1) {
+//                newBaogaoId = template.replaceAll("Y", String.valueOf(year)).replace("M", ms).replaceAll("X", indexs).replaceAll("T", "NX1");
+//            } else {
+//                newBaogaoId = template.replaceAll("Y", String.valueOf(year)).replace("M", ms).replaceAll("X", indexs).replaceAll("T", "");
+//            }
+//        }
+//
+//        this.jsonString = "{success:true,data:" + json.serialize(newBaogaoId) + "}";
+//        return "success";
+//    }
+
+    /**
+     * 获取新报告号
+     */
     public String getNewBaogaoId() {
-        String newBaogaoId = "";
-        String baogaoId = "";
-        String template = "穗和顺房评字(Y)第0M0XT号";
-        boolean index = false;
+        int year = 0;
+        int month = 0;
+        String date = this.getRequest().getParameter("date");
+        if(date != null) {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = null;
+            try {
+                d = format.parse(date);
+                year = d.getYear() + 1900;
+                month = d.getMonth() + 1;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String newBaogaoId = this.realtyService.getNewBaogaoId(year, month);
         JSONSerializer json = JsonUtil.getJSONSerializer();
-        Realty realty = this.realtyService.getLastBusiness();
-        if(realty != null) {
-            baogaoId = realty.getBaogaoId();
-        }
-
-        if(baogaoId != "") {
-            int index1 = Integer.parseInt(baogaoId.substring(17, 20)) + 1;
-            Calendar cal = Calendar.getInstance();
-            int year = cal.get(1);
-            int month = cal.get(2) + 1;
-            String ms = "";
-            String indexs = "";
-            if(month < 10) {
-                ms = "0" + month;
-            } else {
-                ms = "" + month;
-            }
-
-            if(index1 < 10) {
-                indexs = indexs + "0" + index1;
-            } else {
-                indexs = String.valueOf(index1);
-            }
-
-            if(index1 < 100) {
-                indexs = "0" + indexs;
-            } else {
-                indexs = String.valueOf(index1);
-            }
-
-            if(baogaoId.indexOf("NX1") != -1) {
-                newBaogaoId = template.replaceAll("Y", String.valueOf(year)).replace("M", ms).replaceAll("X", indexs).replaceAll("T", "NX1");
-            } else {
-                newBaogaoId = template.replaceAll("Y", String.valueOf(year)).replace("M", ms).replaceAll("X", indexs).replaceAll("T", "");
-            }
-        }
-
-        this.jsonString = "{success:true,data:" + json.serialize(newBaogaoId) + "}";
+        this.jsonString = "{success:true, data:" + json.serialize(newBaogaoId) + "}";
         return "success";
     }
 

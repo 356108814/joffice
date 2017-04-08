@@ -764,7 +764,8 @@
     <Items id="ReportTemplateMenu?reportKey=userDutyReport&amp;title=员工考勤情况统计" text="员工考勤情况统计"></Items> 
   </Items> 
   
-  <Items id="BusinessManager" iconCls="menu-book" text="业务管理" > 
+  <Items id="BusinessManager" iconCls="menu-book" text="业务管理" >
+    <Item id="PreBusinessView" iconCls="menu-find-doc" text="初评管理"/>
     <Item id="BusinessForm" iconCls="menu-flowWait" text="资产业务登记"/>
     <Item id="BusinessView" iconCls="menu-find-doc" text="资产业务查询"/>
     <Item id="RealtyForm" iconCls="menu-flowWait" text="房地产业务登记"/>

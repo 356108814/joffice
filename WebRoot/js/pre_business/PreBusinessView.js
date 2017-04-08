@@ -1,12 +1,8 @@
 /**
- * @author:
- * @class BusinessView
- * @extends Ext.Panel
- * @description 业务管理
- * @createtime:2010-01-16
+ * 初评管理
  */
-Ext.ns('BusinessView');
-BusinessView = Ext.extend(Ext.Panel, {
+Ext.ns('PreBusinessView');
+PreBusinessView = Ext.extend(Ext.Panel, {
     // 构造函数
     constructor: function (_cfg) {
         if (_cfg == null) {
@@ -16,9 +12,9 @@ BusinessView = Ext.extend(Ext.Panel, {
         // 初始化组件
         this.initComponents();
         // 调用父类构造
-        BusinessView.superclass.constructor.call(this, {
-            id: 'BusinessView',
-            title: '资产业务管理',
+        PreBusinessView.superclass.constructor.call(this, {
+            id: 'PreBusinessView',
+            title: '初评管理',
             iconCls: 'menu-profile',
             region: 'center',
             layout: 'border',
@@ -75,19 +71,13 @@ BusinessView = Ext.extend(Ext.Panel, {
                     items: [{
                         width: '90%',
                         fieldLabel: '报告编号',
-                        name: 'Q_baogaoId_S_LK',
+                        name: 'Q_code_S_LK',
                         xtype: 'textfield',
                         maxLength: 125
                     }, {
                         width: '90%',
                         fieldLabel: '委托单位',
                         name: 'Q_weituo_S_LK',
-                        xtype: 'textfield',
-                        maxLength: 125
-                    }, {
-                        width: '90%',
-                        fieldLabel: '业务助理',
-                        name: 'Q_ywzl_S_LK',
                         xtype: 'textfield',
                         maxLength: 125
                     }]
@@ -99,10 +89,10 @@ BusinessView = Ext.extend(Ext.Panel, {
                         border: false,
                         xtype: 'container',
                         layout: 'column',
-                        fieldLabel: '盖章日期',
+                        fieldLabel: '拿号日期',
                         items: [{
                             columnWidth: .49,
-                            name: 'Q_gzrq_D_GE',
+                            name: 'Q_nhrq_D_GE',
                             xtype: 'datefield',
                             format: 'Y-m-d'
                         }, {
@@ -111,7 +101,7 @@ BusinessView = Ext.extend(Ext.Panel, {
                             style: 'margin-top:3px;'
                         }, {
                             columnWidth: .49,
-                            name: 'Q_gzrq_D_LE',
+                            name: 'Q_nhrq_D_LE',
                             xtype: 'datefield',
                             format: 'Y-m-d'
                         }]
@@ -130,12 +120,6 @@ BusinessView = Ext.extend(Ext.Panel, {
                         width: '90%',
                         fieldLabel: '业务主办',
                         name: 'Q_ywzb_S_LK',
-                        xtype: 'textfield',
-                        maxLength: 125
-                    }, {
-                        width: '90%',
-                        fieldLabel: '合作方',
-                        name: 'Q_jjmc_S_LK',
                         xtype: 'textfield',
                         maxLength: 125
                     }]
@@ -163,7 +147,7 @@ BusinessView = Ext.extend(Ext.Panel, {
 
         // 加载数据至store
         this.store = new Ext.data.JsonStore({
-            url: __ctxPath + "/business/listBusiness.do",
+            url: __ctxPath + "/preBusiness/listPreBusiness.do",
             baseParams: {
                 //"Q_delFlag_SN_EQ" : 0
             },// 只查询未被删除的业务
@@ -171,16 +155,13 @@ BusinessView = Ext.extend(Ext.Panel, {
             totalProperty: 'totalCounts',
             remoteSort: true,
             fields: [{
-                name: 'businessId',
+                name: 'id',
                 type: 'int'
-            }, {
-                name: 'myid',
-                type: 'int'
-            }, 'nhrq', 'baogaoId', 'weituo',
-                'pgdx', 'gjmd', 'pgzz', 'ywzb',
-                'gzrq', 'sfrq', 'ywzl', 'username']
+            }, 'nhrq', 'code', 'weituo',
+                'pgdx', 'pgzz', 'ywzb',
+                'gzrq', 'real_name']
         });
-        this.store.setDefaultSort('businessId', 'desc');
+        this.store.setDefaultSort('id', 'desc');
         // 加载数据
         this.store.load({
             params: {
@@ -193,15 +174,11 @@ BusinessView = Ext.extend(Ext.Panel, {
         var sm = new Ext.grid.CheckboxSelectionModel();
         var cm = new Ext.grid.ColumnModel({
             columns: [sm, new Ext.grid.RowNumberer(), {
-                header: 'businessId',
-                dataIndex: 'businessId',
+                header: 'id',
+                dataIndex: 'id',
                 hideable: false,
                 hidden: true
-            }, {
-                header: '数字编号',
-                dataIndex: 'myid',
-                width: 50
-            }, {
+            },{
                 header: '拿号日期',
                 dataIndex: 'nhrq',
                 renderer: function (value) {
@@ -213,7 +190,7 @@ BusinessView = Ext.extend(Ext.Panel, {
                 width: 80
             }, {
                 header: '报告编号',
-                dataIndex: 'baogaoId',
+                dataIndex: 'code',
                 width: 220
             }, {
                 header: '委托单位',
@@ -222,10 +199,7 @@ BusinessView = Ext.extend(Ext.Panel, {
             }, {
                 header: '评估对象',
                 dataIndex: 'pgdx'
-            }, {
-                header: '估价目的',
-                dataIndex: 'gjmd'
-            }, {
+            },{
                 header: '估价总值',
                 dataIndex: 'pgzz'
             }, {
@@ -234,23 +208,8 @@ BusinessView = Ext.extend(Ext.Panel, {
                 align: 'center',
                 width: 80
             }, {
-                header: '业务助理',
-                dataIndex: 'ywzl',
-                hidden: true,
-                align: 'center'
-            }, {
                 header: '盖章日期',
                 dataIndex: 'gzrq',
-                renderer: function (value) {
-                    if (value != null) {
-                        return value.substring(0, 10);
-                    }
-                    return "";
-                },
-                width: 80
-            }, {
-                header: '收费日期',
-                dataIndex: 'sfrq',
                 renderer: function (value) {
                     if (value != null) {
                         return value.substring(0, 10);
@@ -267,14 +226,14 @@ BusinessView = Ext.extend(Ext.Panel, {
                 sortable: false,
                 renderer: function (value, metadata, record, rowIndex,
                                     colIndex) {
-                    var editId = record.data.businessId;
+                    var editId = record.data.id;
                     var str = '';
                     if (isHasRight('zc_del_link')) {
-                        str += '<button title="删除" value=" " id="zc_del_link" class="btn-del" onclick="BusinessView.remove('
+                        str += '<button title="删除" value=" " id="zc_del_link" class="btn-del" onclick="PreBusinessView.remove('
                             + editId + ')">&nbsp;&nbsp;</button>';
                     }
                     if (isHasRight('zc_edit_link')) {
-                        str += '&nbsp;<button title="编辑" id="zc_edit_link" value=" " class="btn-edit" onclick="BusinessView.edit('
+                        str += '&nbsp;<button title="编辑" id="zc_edit_link" value=" " class="btn-edit" onclick="PreBusinessView.edit('
                             + editId + ')">&nbsp;&nbsp;</button>';
                     }
                     return str;
@@ -296,14 +255,14 @@ BusinessView = Ext.extend(Ext.Panel, {
         this.topbar.add(new Ext.Button({
             id: 'zc_add_btn',
             iconCls: 'btn-add',
-            text: '登记业务',
+            text: '新增初评',
             handler: this.createRecord
         }));
 
         this.topbar.add(new Ext.Button({
             id: 'zc_del_btn',
             iconCls: 'btn-del',
-            text: '删除业务',
+            text: '删除初评',
             handler: this.delRecords,
             scope: this
         }));
@@ -319,20 +278,20 @@ BusinessView = Ext.extend(Ext.Panel, {
             id: 'zc_reportAll_btn',
             text: '导出所有至Excel',
             iconCls: 'btn-xls',
-            handler: BusinessView.reportAll,
+            handler: PreBusinessView.reportAll,
             scope: this
         }));
 
         this.topbar.add(new Ext.Button({
             id: 'zc_reportMy_btn',
-            text: '导出我的业务',
+            text: '导出我的初评',
             iconCls: 'btn-xls',
-            handler: BusinessView.reportMy,
+            handler: PreBusinessView.reportMy,
             scope: this
         }));
 
         this.gridPanel = new Ext.grid.GridPanel({
-            id: 'BusinessGrid',
+            id: 'PreBusinessGrid',
             region: 'center',
             stripeRows: true,
             tbar: this.topbar,
@@ -346,7 +305,6 @@ BusinessView = Ext.extend(Ext.Panel, {
             viewConfig: {
                 forceFit: true,
                 autoFill: true, // 自动填充
-                forceFit: true
                 // showPreview : false
             },
             bbar: new HT.PagingBar({store: this.store})
@@ -354,9 +312,9 @@ BusinessView = Ext.extend(Ext.Panel, {
 
         this.gridPanel.addListener('rowdblclick', function (grid, rowindex, e) {
             grid.getSelectionModel().each(function (rec) {
-                var id = rec.data.businessId;
+                var id = rec.data.id;
                 if (isHasViewDetailRight(rec.data)) {
-                    BusinessView.edit(id);
+                    PreBusinessView.edit(id);
                 }
                 else {
                     Ext.ux.Toast.msg('操作信息', '您没有查看其他人业务的权限！');
@@ -366,16 +324,11 @@ BusinessView = Ext.extend(Ext.Panel, {
 
         //权限控制
         validateAll();
-        //判断管理权限,13列为管理
-        this.gridPanel.getColumnModel().setHidden(13, !isHasRight('manage_column'));
+        //判断管理权限,8列为管理
+        this.gridPanel.getColumnModel().setHidden(8, !isHasRight('manage_column'));
 
     },// end of the initComponents()
 
-    /**
-     *
-     * @param {}
-     * self 当前窗体对象
-     */
     search: function (self) {
         if (self.searchPanel.getForm().isValid()) {// 如果合法
             $search({
@@ -392,22 +345,17 @@ BusinessView = Ext.extend(Ext.Panel, {
 
     createRecord: function () {
         var tabs = Ext.getCmp('centerTabPanel');
-        var businessForm = Ext.getCmp('BusinessForm');
-        if (businessForm != null) {
-            tabs.remove('BusinessForm');
+        var preBusinessForm = Ext.getCmp('PreBusinessForm');
+        if (preBusinessForm != null) {
+            tabs.remove('PreBusinessForm');
         }
-        businessForm = new BusinessForm();
-        tabs.add(businessForm);
-        tabs.activate(businessForm);
+        preBusinessForm = new PreBusinessForm();
+        tabs.add(preBusinessForm);
+        tabs.activate(preBusinessForm);
     },
-    /**
-     * 删除记录
-     *
-     * @param {}
-     * record
-     */
+
     delRecords: function (record) {
-        var gridPanel = Ext.getCmp('BusinessGrid');
+        var gridPanel = Ext.getCmp('PreBusinessGrid');
         var selectRecords = gridPanel.getSelectionModel().getSelections();
         if (selectRecords.length == 0) {
             Ext.ux.Toast.msg("信息", "请选择要删除的记录！");
@@ -415,19 +363,13 @@ BusinessView = Ext.extend(Ext.Panel, {
         }
         var ids = Array();
         for (var i = 0; i < selectRecords.length; i++) {
-            ids.push(selectRecords[i].data.businessId);
+            ids.push(selectRecords[i].data.id);
         }
-        BusinessView.remove(ids);
+        PreBusinessView.remove(ids);
     },
 
-    /**
-     * 导出记录
-     *
-     * @param {}
-     * record
-     */
     reportRecords: function (record) {
-        var gridPanel = Ext.getCmp('BusinessGrid');
+        var gridPanel = Ext.getCmp('PreBusinessGrid');
         var selectRecords = gridPanel.getSelectionModel().getSelections();
         if (selectRecords.length == 0) {
             Ext.ux.Toast.msg("信息", "请选择要导出的记录！");
@@ -435,21 +377,21 @@ BusinessView = Ext.extend(Ext.Panel, {
         }
         var ids = Array();
         for (var i = 0; i < selectRecords.length; i++) {
-            ids.push(selectRecords[i].data.businessId);
+            ids.push(selectRecords[i].data.id);
         }
-        BusinessView.report(ids);
+        PreBusinessView.report(ids);
     }
 });
 
 /**
  * 删除记录
  */
-BusinessView.remove = function (id) {
-    var grid = Ext.getCmp("BusinessGrid");
+PreBusinessView.remove = function (id) {
+    var grid = Ext.getCmp("PreBusinessGrid");
     Ext.Msg.confirm('信息确认', '您确认要删除该记录吗？', function (btn) {
         if (btn == 'yes') {
             Ext.Ajax.request({
-                url: __ctxPath + '/business/multiDelBusiness.do',
+                url: __ctxPath + '/preBusiness/multiDelPreBusiness.do',
                 params: {
                     ids: id
                 },
@@ -477,20 +419,20 @@ var loadMask = new Ext.LoadMask(Ext.getBody(), {
 /**
  * 导出记录
  */
-BusinessView.report = function (id) {
-    var grid = Ext.getCmp("BusinessGrid");
+PreBusinessView.report = function (id) {
+    var grid = Ext.getCmp("PreBusinessGrid");
     Ext.Msg.confirm('信息确认', '您确认要导出记录吗？', function (btn) {
         if (btn == 'yes') {
-            BusinessView.showLoading();
+            PreBusinessView.showLoading();
             Ext.Ajax.request({
-                url: __ctxPath + '/business/multiReportBusiness.do',
+                url: __ctxPath + '/preBusiness/multiReportPreBusiness.do',
                 params: {
                     ids: id
                 },
                 method: 'POST',
                 success: function (response, options) {
                     var filepath = Ext.util.JSON.decode(response.responseText).data;
-                    BusinessView.showDownload(filepath);
+                    PreBusinessView.showDownload(filepath);
                 },
                 failure: function (response, options) {
                     Ext.ux.Toast.msg('操作信息', '操作出错，请联系管理员！');
@@ -503,18 +445,18 @@ BusinessView.report = function (id) {
 /**
  * 导出所有记录
  */
-BusinessView.reportAll = function () {
-    var grid = Ext.getCmp("BusinessGrid");
+PreBusinessView.reportAll = function () {
+    var grid = Ext.getCmp("PreBusinessGrid");
     Ext.Msg.confirm('信息确认', '您确认要导出所有记录吗？', function (btn) {
         if (btn == 'yes') {
-            BusinessView.showLoading();
+            PreBusinessView.showLoading();
             Ext.Ajax.request({
-                url: __ctxPath + '/business/reportAllBusiness.do',
+                url: __ctxPath + '/preBusiness/reportAllPreBusiness.do',
                 params: {},
                 method: 'POST',
                 success: function (response, options) {
                     var filepath = Ext.util.JSON.decode(response.responseText).data;
-                    BusinessView.showDownload(filepath);
+                    PreBusinessView.showDownload(filepath);
                 },
                 failure: function (response, options) {
                     Ext.ux.Toast.msg('操作信息', '操作出错，请联系管理员！');
@@ -527,18 +469,18 @@ BusinessView.reportAll = function () {
 /**
  * 导出我的业务
  */
-BusinessView.reportMy = function () {
-    var grid = Ext.getCmp("BusinessGrid");
+PreBusinessView.reportMy = function () {
+    var grid = Ext.getCmp("PreBusinessGrid");
     Ext.Msg.confirm('信息确认', '您确认要导出所有我的业务记录吗？', function (btn) {
         if (btn == 'yes') {
-            BusinessView.showLoading();
+            PreBusinessView.showLoading();
             Ext.Ajax.request({
-                url: __ctxPath + '/business/reportMyBusiness.do',
+                url: __ctxPath + '/preBusiness/reportMyPreBusiness.do',
                 params: {},
                 method: 'POST',
                 success: function (response, options) {
                     var filepath = Ext.util.JSON.decode(response.responseText).data;
-                    BusinessView.showDownload(filepath);
+                    PreBusinessView.showDownload(filepath);
                 },
                 failure: function (response, options) {
                     Ext.ux.Toast.msg('操作信息', '操作出错，请联系管理员！');
@@ -549,42 +491,30 @@ BusinessView.reportMy = function () {
 };
 
 //显示加载中
-BusinessView.showLoading = function () {
+PreBusinessView.showLoading = function () {
     loadMask.show();
 }
 
 //显示下载
-BusinessView.showDownload = function (filepath) {
+PreBusinessView.showDownload = function (filepath) {
 
     loadMask.hide();
     Ext.Msg.alert('操作信息', '记录导出成功，点击确定进行下载', download);
     function download() {
         window.open(filepath);
     }
-}
+};
 
-/**
- * 编辑记录
- *
- * @param {}
- * record
- */
-BusinessView.edit = function (id) {
-
+PreBusinessView.edit = function (id) {
     // 只允许有一个编辑窗口
     var tabs = Ext.getCmp('centerTabPanel');
-    var edit = Ext.getCmp('BusinessForm');
-    if (edit == null) {
-        edit = new BusinessForm({
-            businessId: id
-        });
-        tabs.add(edit);
-    } else {
-        tabs.remove('BusinessForm');
-        edit = new BusinessForm({
-            businessId: id
-        });
-        tabs.add(edit);
+    var edit = Ext.getCmp('PreBusinessForm');
+    if (edit != null) {
+        tabs.remove('PreBusinessForm');
     }
+    edit = new PreBusinessForm({
+        id: id
+    });
+    tabs.add(edit);
     tabs.activate(edit);
-}
+};

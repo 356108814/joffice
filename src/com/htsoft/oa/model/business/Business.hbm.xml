@@ -10,6 +10,11 @@
             <column name="businessId" />
             <generator class="native" />
         </id>
+        <property name="preCode" type="java.lang.String">
+            <column name="pre_code">
+                <comment>初评编号</comment>
+            </column>
+        </property>
         <property name="myid" type="java.lang.Long">
             <column name="myid">
                 <comment>数字编号</comment>
@@ -193,6 +198,16 @@
         <property name="username" type="java.lang.String">
             <column name="username" length="128" not-null="true">
                 <comment>录入人编号</comment>
+            </column>
+        </property>
+        <property name="createDate" type="java.util.Date">
+            <column name="create_date">
+                <comment>创建日期</comment>
+            </column>
+        </property>
+        <property name="updateDate" type="java.util.Date">
+            <column name="update_date">
+                <comment>更新日期</comment>
             </column>
         </property>
     </class>

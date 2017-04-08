@@ -33,7 +33,10 @@
 	<!-- start:  Generated for News From Template: app-action.xml.beansvm  -->
 	<bean id="NewsAction" class="com.htsoft.oa.action.info.NewsAction" scope="prototype"/>
 	<!-- end:  Generated for News From Template: app-action.xml.beansvm  -->
-	
+
+	<bean id="PreBusinessAction" class="com.htsoft.oa.action.prebusiness.PreBusinessAction" scope="prototype"/>
+
+
 	<!-- start:  Generated for Business From Template: app-action.xml.beansvm  -->
 	<bean id="BusinessAction" class="com.htsoft.oa.action.business.BusinessAction" scope="prototype"/>
 	<!-- end:  Generated for Business From Template: app-action.xml.beansvm  -->

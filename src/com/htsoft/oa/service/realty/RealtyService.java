@@ -10,4 +10,6 @@ public interface RealtyService extends BaseService<Realty> {
     Realty getLastBusiness();
 
     void reportMyExcel(List<Realty> realtyList, String savePath);
+
+    String getNewBaogaoId(int year, int month);
 }

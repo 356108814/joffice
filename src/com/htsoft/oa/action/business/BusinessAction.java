@@ -14,8 +14,11 @@ import com.htsoft.oa.service.business.BusinessService;
 import flexjson.JSONSerializer;
 
 import javax.annotation.Resource;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -48,7 +51,6 @@ public class BusinessAction extends BaseAction {
     }
 
     public String list() {
-        new ArrayList();
         AppUser currentUser = ContextUtil.getCurrentUser();
         QueryFilter filter = new QueryFilter(this.getRequest());
         filter.addSorted("businessId", "DESC");
@@ -155,60 +157,36 @@ public class BusinessAction extends BaseAction {
         return "success";
     }
 
+    /**
+     * 获取新报告号
+     */
     public String getNewBaogaoId() {
-        String newBaogaoId = this.businessService.getNewBaogaoId(0, 0);
-//        String newBaogaoId = "";
-//        String baogaoId = "";
-//        String template = "穗和顺资评字(Y)第0M0XT号";
-//        boolean index = false;
-        JSONSerializer json = JsonUtil.getJSONSerializer();
-//        Business business = this.businessService.getLastBusiness();
-////        this.businessService.getNewBaogaoId()
-//        if (business != null) {
-//            baogaoId = business.getBaogaoId();
-//        }
-//
-//        if (baogaoId != "") {
-//            int index1 = Integer.parseInt(baogaoId.substring(17, 20)) + 1;
-//            Calendar cal = Calendar.getInstance();
-//            int year = cal.get(1);
-//            int month = cal.get(2) + 1;
-//            String ms = "";
-//            String indexs = "";
-//            if (month < 10) {
-//                ms = "0" + month;
-//            } else {
-//                ms = "" + month;
-//            }
-//
-//            if (index1 < 10) {
-//                indexs = indexs + "0" + index1;
-//            } else {
-//                indexs = String.valueOf(index1);
-//            }
-//
-//            if (index1 < 100) {
-//                indexs = "0" + indexs;
-//            } else {
-//                indexs = String.valueOf(index1);
-//            }
-//
-//            if (baogaoId.indexOf("NX1") != -1) {
-//                newBaogaoId = template.replaceAll("Y", String.valueOf(year)).replace("M", ms).replaceAll("X", indexs).replaceAll("T", "NX1");
-//            } else {
-//                newBaogaoId = template.replaceAll("Y", String.valueOf(year)).replace("M", ms).replaceAll("X", indexs).replaceAll("T", "");
-//            }
-//        }
+        int year = 0;
+        int month = 0;
+        String date = this.getRequest().getParameter("date");
+        if(date != null) {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            Date d = null;
+            try {
+                d = format.parse(date);
+                year = d.getYear() + 1900;
+                month = d.getMonth() + 1;
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
-        this.jsonString = "{success:true,data:" + json.serialize(newBaogaoId) + "}";
+        String newBaogaoId = this.businessService.getNewBaogaoId(year, month);
+        JSONSerializer json = JsonUtil.getJSONSerializer();
+        this.jsonString = "{success:true, data:" + json.serialize(newBaogaoId) + "}";
         return "success";
     }
 
     public String getRight() {
         AppUser currentUser = ContextUtil.getCurrentUser();
-        Boolean isHasRight = Boolean.valueOf(false);
+        Boolean isHasRight = false;
         if (currentUser.getRoleNames().equals("超级管理员")) {
-            isHasRight = Boolean.valueOf(true);
+            isHasRight = true;
         }
 
         this.jsonString = "{success:true,data:" + isHasRight + "}";
@@ -216,32 +194,28 @@ public class BusinessAction extends BaseAction {
     }
 
     public String multiReport() {
-        ArrayList reportList = new ArrayList();
-        String[] arrayOfString1 = this.getRequest().getParameterValues("ids");
-        if (arrayOfString1 != null) {
-            String[] downloadPath = arrayOfString1;
-            int excelpath = arrayOfString1.length;
-
-            for (int j = 0; j < excelpath; ++j) {
-                String str = downloadPath[j];
-                Business localBusiness = (Business) this.businessService.get(new Long(str));
+        List<Business> reportList = new ArrayList<>();
+        String[] ids = this.getRequest().getParameterValues("ids");
+        if (ids != null) {
+            for (int i = 0; i < ids.length; i++) {
+                Business localBusiness = this.businessService.get(new Long(ids[i]));
                 reportList.add(localBusiness);
             }
         }
 
-        String var8 = this.getDownloadPath();
-        String var9 = this.getAppPath() + "/" + var8;
-        this.businessService.reportExcel(reportList, var9);
-        this.jsonString = "{success:true,data:\'" + var8 + "\'}";
+        String downloadPath = this.getDownloadPath();
+        String savePath = this.getAppPath() + "/" + downloadPath;
+        this.businessService.reportExcel(reportList, savePath);
+        this.jsonString = "{success:true, data:\'" + downloadPath + "\'}";
         return "success";
     }
 
     public String reportAll() {
         List<Business> reportList = this.businessService.getAll();
         String downloadPath = this.getDownloadPath();
-        String excelpath = this.getAppPath() + "/" + downloadPath;
-        this.businessService.reportExcel(reportList, excelpath);
-        this.jsonString = "{success:true,data:\'" + downloadPath + "\'}";
+        String excelPath = this.getAppPath() + "/" + downloadPath;
+        this.businessService.reportExcel(reportList, excelPath);
+        this.jsonString = "{success:true, data:\'" + downloadPath + "\'}";
         return "success";
     }
 
@@ -257,10 +231,10 @@ public class BusinessAction extends BaseAction {
             }
         }
 
-        String downloadPath1 = this.getDownloadPath();
-        String excelpath1 = this.getAppPath() + "/" + downloadPath1;
-        this.businessService.reportMyExcel(reportList, excelpath1);
-        this.jsonString = "{success:true,data:\'" + downloadPath1 + "\'}";
+        String downloadPath = this.getDownloadPath();
+        String excelPath = this.getAppPath() + "/" + downloadPath;
+        this.businessService.reportMyExcel(reportList, excelPath);
+        this.jsonString = "{success:true,data:\'" + downloadPath + "\'}";
         return "success";
     }
 

@@ -1,11 +1,7 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package com.htsoft.oa.service.realty.impl;
 
 import com.dream.util.ExportUtil;
+import com.dream.util.StringUtil;
 import com.htsoft.core.service.impl.BaseServiceImpl;
 import com.htsoft.oa.dao.realty.RealtyDao;
 import com.htsoft.oa.model.realty.Realty;
@@ -13,6 +9,8 @@ import com.htsoft.oa.service.realty.RealtyService;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Calendar;
 import java.util.List;
 
 public class RealtyServiceImpl extends BaseServiceImpl<Realty> implements RealtyService {
@@ -56,5 +54,39 @@ public class RealtyServiceImpl extends BaseServiceImpl<Realty> implements Realty
             var7.printStackTrace();
         }
 
+    }
+
+    /**
+     * 生成规则固定格式+报告数量
+     * 穗和顺房评字(Y)第0MI号 Y:2017 M:03 I:0001
+     * @param year 拿号年
+     * @param month 拿号月份
+     * @return 新报告号
+     */
+    @Override
+    public String getNewBaogaoId(int year, int month) {
+        String baogaoId;
+
+        int baseCount = 0;
+        String tpl = "穗和顺房评字(Y)第0MI号";
+        if(year == 0) {
+            // 默认使用当前时间
+            Calendar now = Calendar.getInstance();
+            year = now.get(Calendar.YEAR);
+            month = now.get(Calendar.MONTH) + 1;
+        }
+        // 解决拿号顺序不连续问题，避免号重复。如：序号到38了，但是实际只拿了24个
+        // TODO 基数要根据实际情况修改，只有2017才需要加
+        if(year == 2017) {
+            baseCount = 4;
+        }
+        // 拿号日期内的报告总数
+        String hql = "select count(*) from Realty as b where b.nhrq LIKE ?";
+        Object object = this.realtyDao.getUniqueResult(hql, new Object[]{"%" + year+"%"});
+        int count = ((BigInteger)object).intValue();
+        baogaoId = tpl.replaceAll("Y", String.valueOf(year));
+        baogaoId = baogaoId.replaceAll("M", StringUtil.lfill(month, 2));
+        baogaoId = baogaoId.replaceAll("I", StringUtil.lfill(baseCount + count + 1, 4));
+        return baogaoId;
     }
 }

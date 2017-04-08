@@ -109,7 +109,11 @@
 		<constructor-arg index="0" ref="newsDao"/>
 	</bean>
 	<!-- end:  Generated for News From Template: app-service.xml.beansvm  -->
-	
+
+	<bean id="preBusinessService" class="com.htsoft.oa.service.prebusiness.PrePreBusinessServiceImpl">
+		<constructor-arg index="0" ref="preBusinessDao"/>
+	</bean>
+
 	<!-- start:  Generated for Business From Template: app-service.xml.beansvm  -->
 	<bean id="businessService" class="com.htsoft.oa.service.business.impl.BusinessServiceImpl">
 		<constructor-arg index="0" ref="businessDao"/>

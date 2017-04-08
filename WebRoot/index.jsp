@@ -122,6 +122,10 @@
 	     <!-- 个人首页JS -->
 	    <script type="text/javascript" src="<%=basePath%>/js/IndexPage.js"></script>
 
+		<!--多选框js-->
+		<script type="text/javascript" src="<%=basePath%>/js/lovcombo/lovcombo.js"></script>
+		<link href="<%=basePath%>/js/lovcombo/lovcombo.css" rel="stylesheet" type="text/css" />
+
 	    
 		
 	</head>

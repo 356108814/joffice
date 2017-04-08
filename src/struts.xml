@@ -169,6 +169,12 @@
 		</action> 
 	</package>
 
+	<package name="preBusiness" extends="struts-default" namespace="/preBusiness">
+		<action name="*PreBusiness" class="PreBusinessAction" method="{1}">
+			<result>${successResultValue}</result>
+		</action>
+	</package>
+
 	<package name="business" extends="struts-default" namespace="/business">
 		<action name="*Business" class="BusinessAction" method="{1}">
 			<result>${successResultValue}</result>

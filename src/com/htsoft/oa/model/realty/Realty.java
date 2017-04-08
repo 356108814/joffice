@@ -10,6 +10,7 @@ import java.util.Date;
 
 public class Realty implements Serializable {
     private Long businessId;
+    private String preCode;
     private Long myid;
     private Date nhrq;
     private String baobeiId;
@@ -54,6 +55,8 @@ public class Realty implements Serializable {
     private String xmdz;
     private String bgfs;
     private String username;
+    private Date createDate;
+    private Date updateDate;
 
     public Realty() {
     }
@@ -63,64 +66,24 @@ public class Realty implements Serializable {
         this.username = username;
     }
 
-    public Realty(Long businessId, Long myid, Date nhrq, String baobeiId, String baogaoId, String xmmc, String weituo, String pgdx, String gjmd, String gjff, Double pgzz, Float bzsf, Float ydje, Float kpje, Float dzje, Float zjbl, Float ssje, String jjmc, String ywzb, String ywzl, String xckc, Float zbgzl, Float zlgzl, Float kcgzl, Date cprq, String bgr, Date gzrq, String qzpgs, Date sfrq, String skfs, String ywht, String sfyfzjf, String dgwcsm, String beizhu1, String beizhu2, Date cbgrq, String gjdxlx, Float jzmj, Float tdmj, Date gjsd, Float pgdj, String jzlx, String xmdz, String bgfs, String username) {
-        this.businessId = businessId;
-        this.myid = myid;
-        this.nhrq = nhrq;
-        this.baobeiId = baobeiId;
-        this.baogaoId = baogaoId;
-        this.xmmc = xmmc;
-        this.weituo = weituo;
-        this.pgdx = pgdx;
-        this.gjmd = gjmd;
-        this.gjff = gjff;
-        this.pgzz = pgzz;
-        this.bzsf = bzsf;
-        this.ydje = ydje;
-        this.kpje = kpje;
-        this.dzje = dzje;
-        this.zjbl = zjbl;
-        this.ssje = ssje;
-        this.jjmc = jjmc;
-        this.ywzb = ywzb;
-        this.ywzl = ywzl;
-        this.xckc = xckc;
-        this.zbgzl = zbgzl;
-        this.zlgzl = zlgzl;
-        this.kcgzl = kcgzl;
-        this.cprq = cprq;
-        this.bgr = bgr;
-        this.gzrq = gzrq;
-        this.qzpgs = qzpgs;
-        this.sfrq = sfrq;
-        this.skfs = skfs;
-        this.ywht = ywht;
-        this.sfyfzjf = sfyfzjf;
-        this.dgwcsm = dgwcsm;
-        this.beizhu1 = beizhu1;
-        this.beizhu2 = beizhu2;
-        this.cbgrq = cbgrq;
-        this.gjdxlx = gjdxlx;
-        this.jzmj = jzmj;
-        this.tdmj = tdmj;
-        this.gjsd = gjsd;
-        this.pgdj = pgdj;
-        this.jzlx = jzlx;
-        this.xmdz = xmdz;
-        this.bgfs = bgfs;
-        this.username = username;
-    }
-
     public Long getBusinessId() {
-        return this.businessId;
+        return businessId;
     }
 
     public void setBusinessId(Long businessId) {
         this.businessId = businessId;
     }
 
+    public String getPreCode() {
+        return preCode;
+    }
+
+    public void setPreCode(String preCode) {
+        this.preCode = preCode;
+    }
+
     public Long getMyid() {
-        return this.myid;
+        return myid;
     }
 
     public void setMyid(Long myid) {
@@ -128,7 +91,7 @@ public class Realty implements Serializable {
     }
 
     public Date getNhrq() {
-        return this.nhrq;
+        return nhrq;
     }
 
     public void setNhrq(Date nhrq) {
@@ -136,7 +99,7 @@ public class Realty implements Serializable {
     }
 
     public String getBaobeiId() {
-        return this.baobeiId;
+        return baobeiId;
     }
 
     public void setBaobeiId(String baobeiId) {
@@ -144,7 +107,7 @@ public class Realty implements Serializable {
     }
 
     public String getBaogaoId() {
-        return this.baogaoId;
+        return baogaoId;
     }
 
     public void setBaogaoId(String baogaoId) {
@@ -152,7 +115,7 @@ public class Realty implements Serializable {
     }
 
     public String getXmmc() {
-        return this.xmmc;
+        return xmmc;
     }
 
     public void setXmmc(String xmmc) {
@@ -160,7 +123,7 @@ public class Realty implements Serializable {
     }
 
     public String getWeituo() {
-        return this.weituo;
+        return weituo;
     }
 
     public void setWeituo(String weituo) {
@@ -168,7 +131,7 @@ public class Realty implements Serializable {
     }
 
     public String getPgdx() {
-        return this.pgdx;
+        return pgdx;
     }
 
     public void setPgdx(String pgdx) {
@@ -176,7 +139,7 @@ public class Realty implements Serializable {
     }
 
     public String getGjmd() {
-        return this.gjmd;
+        return gjmd;
     }
 
     public void setGjmd(String gjmd) {
@@ -184,7 +147,7 @@ public class Realty implements Serializable {
     }
 
     public String getGjff() {
-        return this.gjff;
+        return gjff;
     }
 
     public void setGjff(String gjff) {
@@ -192,7 +155,7 @@ public class Realty implements Serializable {
     }
 
     public Double getPgzz() {
-        return this.pgzz;
+        return pgzz;
     }
 
     public void setPgzz(Double pgzz) {
@@ -200,7 +163,7 @@ public class Realty implements Serializable {
     }
 
     public Float getBzsf() {
-        return this.bzsf;
+        return bzsf;
     }
 
     public void setBzsf(Float bzsf) {
@@ -208,7 +171,7 @@ public class Realty implements Serializable {
     }
 
     public Float getYdje() {
-        return this.ydje;
+        return ydje;
     }
 
     public void setYdje(Float ydje) {
@@ -216,7 +179,7 @@ public class Realty implements Serializable {
     }
 
     public Float getKpje() {
-        return this.kpje;
+        return kpje;
     }
 
     public void setKpje(Float kpje) {
@@ -224,7 +187,7 @@ public class Realty implements Serializable {
     }
 
     public Float getDzje() {
-        return this.dzje;
+        return dzje;
     }
 
     public void setDzje(Float dzje) {
@@ -232,7 +195,7 @@ public class Realty implements Serializable {
     }
 
     public Float getZjbl() {
-        return this.zjbl;
+        return zjbl;
     }
 
     public void setZjbl(Float zjbl) {
@@ -240,7 +203,7 @@ public class Realty implements Serializable {
     }
 
     public Float getSsje() {
-        return this.ssje;
+        return ssje;
     }
 
     public void setSsje(Float ssje) {
@@ -248,7 +211,7 @@ public class Realty implements Serializable {
     }
 
     public String getJjmc() {
-        return this.jjmc;
+        return jjmc;
     }
 
     public void setJjmc(String jjmc) {
@@ -256,7 +219,7 @@ public class Realty implements Serializable {
     }
 
     public String getYwzb() {
-        return this.ywzb;
+        return ywzb;
     }
 
     public void setYwzb(String ywzb) {
@@ -264,7 +227,7 @@ public class Realty implements Serializable {
     }
 
     public String getYwzl() {
-        return this.ywzl;
+        return ywzl;
     }
 
     public void setYwzl(String ywzl) {
@@ -272,7 +235,7 @@ public class Realty implements Serializable {
     }
 
     public String getXckc() {
-        return this.xckc;
+        return xckc;
     }
 
     public void setXckc(String xckc) {
@@ -280,7 +243,7 @@ public class Realty implements Serializable {
     }
 
     public Float getZbgzl() {
-        return this.zbgzl;
+        return zbgzl;
     }
 
     public void setZbgzl(Float zbgzl) {
@@ -288,7 +251,7 @@ public class Realty implements Serializable {
     }
 
     public Float getZlgzl() {
-        return this.zlgzl;
+        return zlgzl;
     }
 
     public void setZlgzl(Float zlgzl) {
@@ -296,7 +259,7 @@ public class Realty implements Serializable {
     }
 
     public Float getKcgzl() {
-        return this.kcgzl;
+        return kcgzl;
     }
 
     public void setKcgzl(Float kcgzl) {
@@ -304,7 +267,7 @@ public class Realty implements Serializable {
     }
 
     public Date getCprq() {
-        return this.cprq;
+        return cprq;
     }
 
     public void setCprq(Date cprq) {
@@ -312,7 +275,7 @@ public class Realty implements Serializable {
     }
 
     public String getBgr() {
-        return this.bgr;
+        return bgr;
     }
 
     public void setBgr(String bgr) {
@@ -320,7 +283,7 @@ public class Realty implements Serializable {
     }
 
     public Date getGzrq() {
-        return this.gzrq;
+        return gzrq;
     }
 
     public void setGzrq(Date gzrq) {
@@ -328,7 +291,7 @@ public class Realty implements Serializable {
     }
 
     public String getQzpgs() {
-        return this.qzpgs;
+        return qzpgs;
     }
 
     public void setQzpgs(String qzpgs) {
@@ -336,7 +299,7 @@ public class Realty implements Serializable {
     }
 
     public Date getSfrq() {
-        return this.sfrq;
+        return sfrq;
     }
 
     public void setSfrq(Date sfrq) {
@@ -344,7 +307,7 @@ public class Realty implements Serializable {
     }
 
     public String getSkfs() {
-        return this.skfs;
+        return skfs;
     }
 
     public void setSkfs(String skfs) {
@@ -352,7 +315,7 @@ public class Realty implements Serializable {
     }
 
     public String getYwht() {
-        return this.ywht;
+        return ywht;
     }
 
     public void setYwht(String ywht) {
@@ -360,7 +323,7 @@ public class Realty implements Serializable {
     }
 
     public String getSfyfzjf() {
-        return this.sfyfzjf;
+        return sfyfzjf;
     }
 
     public void setSfyfzjf(String sfyfzjf) {
@@ -368,7 +331,7 @@ public class Realty implements Serializable {
     }
 
     public String getDgwcsm() {
-        return this.dgwcsm;
+        return dgwcsm;
     }
 
     public void setDgwcsm(String dgwcsm) {
@@ -376,7 +339,7 @@ public class Realty implements Serializable {
     }
 
     public String getBeizhu1() {
-        return this.beizhu1;
+        return beizhu1;
     }
 
     public void setBeizhu1(String beizhu1) {
@@ -384,7 +347,7 @@ public class Realty implements Serializable {
     }
 
     public String getBeizhu2() {
-        return this.beizhu2;
+        return beizhu2;
     }
 
     public void setBeizhu2(String beizhu2) {
@@ -392,7 +355,7 @@ public class Realty implements Serializable {
     }
 
     public Date getCbgrq() {
-        return this.cbgrq;
+        return cbgrq;
     }
 
     public void setCbgrq(Date cbgrq) {
@@ -400,7 +363,7 @@ public class Realty implements Serializable {
     }
 
     public String getGjdxlx() {
-        return this.gjdxlx;
+        return gjdxlx;
     }
 
     public void setGjdxlx(String gjdxlx) {
@@ -408,7 +371,7 @@ public class Realty implements Serializable {
     }
 
     public Float getJzmj() {
-        return this.jzmj;
+        return jzmj;
     }
 
     public void setJzmj(Float jzmj) {
@@ -416,7 +379,7 @@ public class Realty implements Serializable {
     }
 
     public Float getTdmj() {
-        return this.tdmj;
+        return tdmj;
     }
 
     public void setTdmj(Float tdmj) {
@@ -424,7 +387,7 @@ public class Realty implements Serializable {
     }
 
     public Date getGjsd() {
-        return this.gjsd;
+        return gjsd;
     }
 
     public void setGjsd(Date gjsd) {
@@ -432,7 +395,7 @@ public class Realty implements Serializable {
     }
 
     public Float getPgdj() {
-        return this.pgdj;
+        return pgdj;
     }
 
     public void setPgdj(Float pgdj) {
@@ -440,7 +403,7 @@ public class Realty implements Serializable {
     }
 
     public String getJzlx() {
-        return this.jzlx;
+        return jzlx;
     }
 
     public void setJzlx(String jzlx) {
@@ -448,7 +411,7 @@ public class Realty implements Serializable {
     }
 
     public String getXmdz() {
-        return this.xmdz;
+        return xmdz;
     }
 
     public void setXmdz(String xmdz) {
@@ -456,7 +419,7 @@ public class Realty implements Serializable {
     }
 
     public String getBgfs() {
-        return this.bgfs;
+        return bgfs;
     }
 
     public void setBgfs(String bgfs) {
@@ -464,10 +427,26 @@ public class Realty implements Serializable {
     }
 
     public String getUsername() {
-        return this.username;
+        return username;
     }
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getUpdateDate() {
+        return updateDate;
+    }
+
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
 }

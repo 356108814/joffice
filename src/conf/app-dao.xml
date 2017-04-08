@@ -47,6 +47,8 @@
 	<bean id="newsDao" class="com.htsoft.oa.dao.info.impl.NewsDaoImpl" parent="baseDao"/>
 <!-- end:  Generated for News From Template: app-dao.xml.beansvm  -->
 
+	<bean id="preBusinessDao" class="com.htsoft.oa.dao.prebusiness.PreBusinessDaoImpl" parent="baseDao"/>
+
 <!-- start:  Generated for Business From Template: app-dao.xml.beansvm  -->
 	<bean id="businessDao" class="com.htsoft.oa.dao.business.impl.BusinessDaoImpl" parent="baseDao"/>
 <!-- end:  Generated for Business From Template: app-dao.xml.beansvm  -->
