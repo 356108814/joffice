@@ -122,6 +122,14 @@ PreBusinessView = Ext.extend(Ext.Panel, {
                         name: 'Q_ywzb_S_LK',
                         xtype: 'textfield',
                         maxLength: 125
+                    }, {
+                        fieldLabel: '是否已出报告',
+                        name: 'Q_isReport_S_LK',
+                        xtype: 'combo',
+                        mode: 'local',
+                        editable: false,
+                        triggerAction: 'all',
+                        store: ["是", "否"]
                     }]
                 }, {
                     columnWidth: .1,
@@ -159,7 +167,7 @@ PreBusinessView = Ext.extend(Ext.Panel, {
                 type: 'int'
             }, 'nhrq', 'code', 'weituo',
                 'pgdx', 'pgzz', 'ywzb',
-                'gzrq', 'real_name']
+                'gzrq', 'isReport', 'real_name']
         });
         this.store.setDefaultSort('id', 'desc');
         // 加载数据
@@ -217,6 +225,9 @@ PreBusinessView = Ext.extend(Ext.Panel, {
                     return "";
                 },
                 width: 80
+            },  {
+                header: '是否已出报告',
+                dataIndex: 'isReport'
             }, {
 
                 header: '管理',
@@ -224,8 +235,7 @@ PreBusinessView = Ext.extend(Ext.Panel, {
                 align: 'center',
                 width: 80,
                 sortable: false,
-                renderer: function (value, metadata, record, rowIndex,
-                                    colIndex) {
+                renderer: function (value, metadata, record, rowIndex, colIndex) {
                     var editId = record.data.id;
                     var str = '';
                     if (isHasRight('zc_del_link')) {
@@ -324,8 +334,8 @@ PreBusinessView = Ext.extend(Ext.Panel, {
 
         //权限控制
         validateAll();
-        //判断管理权限,8列为管理
-        this.gridPanel.getColumnModel().setHidden(8, !isHasRight('manage_column'));
+        //判断管理权限,10列为管理
+        this.gridPanel.getColumnModel().setHidden(10, !isHasRight('manage_column'));
 
     },// end of the initComponents()
 
@@ -361,7 +371,7 @@ PreBusinessView = Ext.extend(Ext.Panel, {
             Ext.ux.Toast.msg("信息", "请选择要删除的记录！");
             return;
         }
-        var ids = Array();
+        var ids = [];
         for (var i = 0; i < selectRecords.length; i++) {
             ids.push(selectRecords[i].data.id);
         }
@@ -375,7 +385,7 @@ PreBusinessView = Ext.extend(Ext.Panel, {
             Ext.ux.Toast.msg("信息", "请选择要导出的记录！");
             return;
         }
-        var ids = Array();
+        var ids = [];
         for (var i = 0; i < selectRecords.length; i++) {
             ids.push(selectRecords[i].data.id);
         }

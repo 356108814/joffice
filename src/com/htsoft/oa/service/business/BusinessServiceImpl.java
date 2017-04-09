@@ -1,11 +1,11 @@
-package com.htsoft.oa.service.business.impl;
+package com.htsoft.oa.service.business;
 
 import com.dream.util.ExportUtil;
 import com.dream.util.StringUtil;
 import com.htsoft.core.service.impl.BaseServiceImpl;
+import com.htsoft.oa.GlobalConfig;
 import com.htsoft.oa.dao.business.BusinessDao;
 import com.htsoft.oa.model.business.Business;
-import com.htsoft.oa.service.business.BusinessService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -27,9 +27,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
     public void reportExcel(List<Business> businessList, String savePath) {
         try {
             FileOutputStream out = new FileOutputStream(savePath);
-            String e = "序号,数字编号,拿号日期,报备号,报告编号,项目名称,委托单位,评估对象,价估目的,估计方法,评估总值,约定金额,开票金额,到账金额,中介比例,实收金额,合作方,业务主办,主办工作量,业务助理,助理工作量,现场勘查,勘察工作量,初评日期,报告（拟写人）,盖章日期,出报告日期,报告份数,签字评估师,收费日期（日期空表示未收费）,收款方式,有无合同,否是已付中介费,底稿完成说明,注备1(基本),注备2(收费),录入人";
-            String filedString = "businessId,myid,nhrq,baobeiId,baogaoId,xmmc,weituo,pgdx,gjmd,gjff,pgzz,ydje,kpje,dzje,zjbl,ssje,jjmc,ywzb,zbgzl,ywzl,zlgzl,xckc,kcgzl,cprq,bgr,gzrq,cbgrq,bgfs,qzpgs,sfrq,skfs,ywht,sfyfzjf,dgwcsm,beizhu1,beizhu2,username";
-            ExportUtil.ExportXls(businessList, out, filedString, e);
+            String titles = "序号,数字编号,拿号日期,报备号,报告编号,项目名称,委托单位,评估对象,价估目的,估计方法,评估总值,约定金额,开票金额,到账金额,中介比例,实收金额,合作方,业务主办,主办工作量,业务助理,助理工作量,现场勘查,勘察工作量,初评日期,报告（拟写人）,盖章日期,出报告日期,报告份数,签字评估师,收费日期（日期空表示未收费）,收款方式,有无合同,否是已付中介费,底稿完成说明,注备1(基本),注备2(收费),录入人";
+            String fields = "businessId,myid,nhrq,baobeiId,baogaoId,xmmc,weituo,pgdx,gjmd,gjff,pgzz,ydje,kpje,dzje,zjbl,ssje,jjmc,ywzb,zbgzl,ywzl,zlgzl,xckc,kcgzl,cprq,bgr,gzrq,cbgrq,bgfs,qzpgs,sfrq,skfs,ywht,sfyfzjf,dgwcsm,beizhu1,beizhu2,username";
+            ExportUtil.ExportXls(businessList, out, fields, titles);
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,9 +44,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
     public void reportMyExcel(List<Business> businessList, String savePath) {
         try {
             FileOutputStream out = new FileOutputStream(savePath);
-            String e = "序号,数字编号,拿号日期,报告编号,项目名称,委托单位,评估对象,价估目的,估计方法,评估总值,约定金额,合作方,业务主办,主办工作量,业务助理,助理工作量,现场勘查,勘察工作量,初评日期,报告（拟写人）,盖章日期,出报告日期,报告份数,签字评估师,收费日期（日期空表示未收费）,有无合同,底稿完成说明,注备1(基本),录入人";
-            String filedString = "businessId,myid,nhrq,baogaoId,xmmc,weituo,pgdx,gjmd,gjff,pgzz,dzje,jjmc,ywzb,zbgzl,ywzl,zlgzl,xckc,kcgzl,cprq,bgr,gzrq,cbgrq,bgfs,qzpgs,sfrq,ywht,dgwcsm,beizhu1,username";
-            ExportUtil.ExportXls(businessList, out, filedString, e);
+            String titles = "序号,数字编号,拿号日期,报告编号,项目名称,委托单位,评估对象,价估目的,估计方法,评估总值,约定金额,合作方,业务主办,主办工作量,业务助理,助理工作量,现场勘查,勘察工作量,初评日期,报告（拟写人）,盖章日期,出报告日期,报告份数,签字评估师,收费日期（日期空表示未收费）,有无合同,底稿完成说明,注备1(基本),录入人";
+            String fields = "businessId,myid,nhrq,baogaoId,xmmc,weituo,pgdx,gjmd,gjff,pgzz,dzje,jjmc,ywzb,zbgzl,ywzl,zlgzl,xckc,kcgzl,cprq,bgr,gzrq,cbgrq,bgfs,qzpgs,sfrq,ywht,dgwcsm,beizhu1,username";
+            ExportUtil.ExportXls(businessList, out, fields, titles);
             out.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,9 +73,9 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
             month = now.get(Calendar.MONTH) + 1;
         }
         // 解决拿号顺序不连续问题，避免号重复。如：序号到38了，但是实际只拿了24个
-        // TODO 基数要根据实际情况修改，只有2017才需要加
+        // 只有2017才需要加
         if(year == 2017) {
-            baseCount = 4;
+            baseCount = Integer.parseInt(GlobalConfig.getValue("business_base_count"));
         }
         // 拿号日期内的报告总数
         String hql = "select count(*) from Business as b where b.nhrq LIKE ?";

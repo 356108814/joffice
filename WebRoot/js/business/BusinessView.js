@@ -366,8 +366,8 @@ BusinessView = Ext.extend(Ext.Panel, {
 
         //权限控制
         validateAll();
-        //判断管理权限,13列为管理
-        this.gridPanel.getColumnModel().setHidden(13, !isHasRight('manage_column'));
+        //判断管理权限,14列为管理
+        this.gridPanel.getColumnModel().setHidden(14, !isHasRight('manage_column'));
 
     },// end of the initComponents()
 
@@ -413,7 +413,7 @@ BusinessView = Ext.extend(Ext.Panel, {
             Ext.ux.Toast.msg("信息", "请选择要删除的记录！");
             return;
         }
-        var ids = Array();
+        var ids = [];
         for (var i = 0; i < selectRecords.length; i++) {
             ids.push(selectRecords[i].data.businessId);
         }
@@ -433,7 +433,7 @@ BusinessView = Ext.extend(Ext.Panel, {
             Ext.ux.Toast.msg("信息", "请选择要导出的记录！");
             return;
         }
-        var ids = Array();
+        var ids = [];
         for (var i = 0; i < selectRecords.length; i++) {
             ids.push(selectRecords[i].data.businessId);
         }
@@ -551,7 +551,7 @@ BusinessView.reportMy = function () {
 //显示加载中
 BusinessView.showLoading = function () {
     loadMask.show();
-}
+};
 
 //显示下载
 BusinessView.showDownload = function (filepath) {
@@ -561,7 +561,7 @@ BusinessView.showDownload = function (filepath) {
     function download() {
         window.open(filepath);
     }
-}
+};
 
 /**
  * 编辑记录
@@ -587,4 +587,4 @@ BusinessView.edit = function (id) {
         tabs.add(edit);
     }
     tabs.activate(edit);
-}
+};

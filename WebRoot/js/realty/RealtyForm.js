@@ -671,6 +671,7 @@ RealtyForm = Ext.extend(Ext.Panel, {
                         var field = fields[i];
                         Ext.getCmp('realtyForm.' + field).setValue(res[field]);
                     }
+                    Ext.getCmp('realtyForm.beizhu1').setValue(res['beizhu']);
                     if (res.nhrq != '' && res.nhrq != null) {
                         var nhrq = getDateFromFormat(res.nhrq, 'yyyy-MM-dd HH:mm:ss');
                         Ext.getCmp('realtyForm.nhrq').setValue(new Date(nhrq));

@@ -115,13 +115,13 @@
 	</bean>
 
 	<!-- start:  Generated for Business From Template: app-service.xml.beansvm  -->
-	<bean id="businessService" class="com.htsoft.oa.service.business.impl.BusinessServiceImpl">
+	<bean id="businessService" class="com.htsoft.oa.service.business.BusinessServiceImpl">
 		<constructor-arg index="0" ref="businessDao"/>
 	</bean>
 	<!-- end:  Generated for Business From Template: app-service.xml.beansvm  -->
 	
 	<!-- start:  Generated for Realty From Template: app-service.xml.beansvm  -->
-	<bean id="realtyService" class="com.htsoft.oa.service.realty.impl.RealtyServiceImpl">
+	<bean id="realtyService" class="com.htsoft.oa.service.realty.RealtyServiceImpl">
 		<constructor-arg index="0" ref="realtyDao"/>
 	</bean>
 	<!-- end:  Generated for Business From Template: app-service.xml.beansvm  -->

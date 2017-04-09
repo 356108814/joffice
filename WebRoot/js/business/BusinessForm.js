@@ -671,6 +671,7 @@ BusinessForm = Ext.extend(Ext.Panel, {
                         var field = fields[i];
                         Ext.getCmp('businessForm.' + field).setValue(res[field]);
                     }
+                    Ext.getCmp('businessForm.beizhu1').setValue(res['beizhu']);
                     if (res.nhrq != '' && res.nhrq != null) {
                         var nhrq = getDateFromFormat(res.nhrq, 'yyyy-MM-dd HH:mm:ss');
                         Ext.getCmp('businessForm.nhrq').setValue(new Date(nhrq));

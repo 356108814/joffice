@@ -1,16 +1,17 @@
 package com.htsoft.oa.action.business;
 
 import com.dream.util.CheckUtil;
-import com.dream.util.FileUtil;
 import com.dream.util.RightUtil;
 import com.htsoft.core.command.QueryFilter;
 import com.htsoft.core.util.BeanUtil;
 import com.htsoft.core.util.ContextUtil;
 import com.htsoft.core.util.JsonUtil;
 import com.htsoft.core.web.action.BaseAction;
+import com.htsoft.oa.GlobalConfig;
 import com.htsoft.oa.model.business.Business;
 import com.htsoft.oa.model.system.AppUser;
 import com.htsoft.oa.service.business.BusinessService;
+import com.htsoft.oa.service.prebusiness.PreBusinessService;
 import flexjson.JSONSerializer;
 
 import javax.annotation.Resource;
@@ -19,8 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 资产控制器
@@ -28,6 +29,8 @@ import java.util.List;
 public class BusinessAction extends BaseAction {
     @Resource
     private BusinessService businessService;
+    @Resource
+    private PreBusinessService preBusinessService;
     private Business business;
     private Long businessId;
 
@@ -59,29 +62,15 @@ public class BusinessAction extends BaseAction {
             showList = this.businessService.getAll(filter);
         } else {
             filter.addFilter("Q_ywzb_S_LK", currentUser.getFullname());
+            filter.addFilter("Q_ywzl_S_LK", currentUser.getFullname());
             showList = this.businessService.getAll(filter);
-            QueryFilter buff = new QueryFilter(this.getRequest());
-            buff.addFilter("Q_ywzl_S_LK", currentUser.getFullname());
-            List json = this.businessService.getAll(buff);
-            int addSize = 0;
-            Iterator var8 = json.iterator();
-
-            while (var8.hasNext()) {
-                Business business = (Business) var8.next();
-                if (!showList.contains(business)) {
-                    showList.add(business);
-                    ++addSize;
-                }
-            }
-
-            filter.getPagingBean().setTotalItems(filter.getPagingBean().getTotalItems() + addSize);
         }
-
-        StringBuffer var9 = (new StringBuffer("{success:true,\'totalCounts\':")).append(filter.getPagingBean().getTotalItems()).append(",result:");
-        JSONSerializer var10 = JsonUtil.getJSONSerializer(new String[]{"nhrq", "cprq", "gzrq", "sfrq", "cbgrq"});
-        var9.append(var10.serialize(showList));
-        var9.append("}");
-        this.jsonString = var9.toString();
+        StringBuffer buffer = (new StringBuffer("{success:true,\'totalCounts\':"))
+                .append(filter.getPagingBean().getTotalItems()).append(",result:");
+        JSONSerializer json = JsonUtil.getJSONSerializer("nhrq", "cprq", "gzrq", "sfrq", "cbgrq");
+        buffer.append(json.serialize(showList));
+        buffer.append("}");
+        this.jsonString = buffer.toString();
         return "success";
     }
 
@@ -94,39 +83,46 @@ public class BusinessAction extends BaseAction {
     }
 
     public String save() {
+        Business saveBusiness;
         AppUser currentUser = ContextUtil.getCurrentUser();
         this.business.setUsername(currentUser.getFullname());
         if (this.business.getBusinessId() == null) {
-            this.businessService.save(this.business);
+            saveBusiness = this.business;
         } else {
-            Business orgBusiness = this.businessService.get(this.business.getBusinessId());
+            saveBusiness = this.businessService.get(this.business.getBusinessId());
 
             try {
-                BeanUtil.copyNotNullProperties(orgBusiness, this.business);
+                BeanUtil.copyNotNullProperties(saveBusiness, this.business);
                 if (this.business.getNhrq() == null) {
-                    orgBusiness.setNhrq(null);
+                    saveBusiness.setNhrq(null);
                 }
 
                 if (this.business.getCprq() == null) {
-                    orgBusiness.setCprq(null);
+                    saveBusiness.setCprq(null);
                 }
 
                 if (this.business.getGzrq() == null) {
-                    orgBusiness.setGzrq(null);
+                    saveBusiness.setGzrq(null);
                 }
 
                 if (this.business.getSfrq() == null) {
-                    orgBusiness.setSfrq( null);
+                    saveBusiness.setSfrq( null);
                 }
 
                 if (this.business.getCbgrq() == null) {
-                    orgBusiness.setCbgrq(null);
+                    saveBusiness.setCbgrq(null);
                 }
 
-                this.businessService.save(orgBusiness);
-            } catch (Exception var4) {
-                this.logger.error(var4.getMessage());
+            } catch (Exception e) {
+                this.logger.error(e.getMessage());
             }
+        }
+        this.businessService.save(saveBusiness);
+
+        // 更新初评已出报告
+        String preCode = saveBusiness.getPreCode();
+        if(preCode != null && !Objects.equals(preCode, "")) {
+            preBusinessService.setIsReport(this.getRequest(), preCode, true);
         }
 
         this.setJsonString("{success:true}");
@@ -203,19 +199,19 @@ public class BusinessAction extends BaseAction {
             }
         }
 
-        String downloadPath = this.getDownloadPath();
-        String savePath = this.getAppPath() + "/" + downloadPath;
-        this.businessService.reportExcel(reportList, savePath);
-        this.jsonString = "{success:true, data:\'" + downloadPath + "\'}";
+        String absExcelPath = GlobalConfig.getSaveExcelPath(this.getRequest());
+        String relExcelPath = GlobalConfig.getExcelRelativePath();
+        this.businessService.reportExcel(reportList, absExcelPath);
+        this.jsonString = "{success:true, data:\'" + relExcelPath + "\'}";
         return "success";
     }
 
     public String reportAll() {
         List<Business> reportList = this.businessService.getAll();
-        String downloadPath = this.getDownloadPath();
-        String excelPath = this.getAppPath() + "/" + downloadPath;
-        this.businessService.reportExcel(reportList, excelPath);
-        this.jsonString = "{success:true, data:\'" + downloadPath + "\'}";
+        String absExcelPath = GlobalConfig.getSaveExcelPath(this.getRequest());
+        String relExcelPath = GlobalConfig.getExcelRelativePath();
+        this.businessService.reportExcel(reportList, absExcelPath);
+        this.jsonString = "{success:true, data:\'" + relExcelPath + "\'}";
         return "success";
     }
 
@@ -231,22 +227,14 @@ public class BusinessAction extends BaseAction {
             }
         }
 
-        String downloadPath = this.getDownloadPath();
-        String excelPath = this.getAppPath() + "/" + downloadPath;
-        this.businessService.reportMyExcel(reportList, excelPath);
-        this.jsonString = "{success:true,data:\'" + downloadPath + "\'}";
+        String absExcelPath = GlobalConfig.getSaveExcelPath(this.getRequest());
+        String relExcelPath = GlobalConfig.getExcelRelativePath();
+        this.businessService.reportMyExcel(reportList, absExcelPath);
+        this.jsonString = "{success:true,data:\'" + relExcelPath + "\'}";
         return "success";
     }
 
     public String search() {
         return "success";
-    }
-
-    public String getAppPath() {
-        return this.getRequest().getSession().getServletContext().getRealPath("");
-    }
-
-    public String getDownloadPath() {
-        return "backup/tmp/" + FileUtil.getTimeExcelName();
     }
 }

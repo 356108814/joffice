@@ -2,12 +2,15 @@ package com.htsoft.oa.service.prebusiness;
 
 import com.dream.util.ExportUtil;
 import com.dream.util.StringUtil;
+import com.htsoft.core.command.QueryFilter;
 import com.htsoft.core.service.impl.BaseServiceImpl;
+import com.htsoft.oa.GlobalConfig;
 import com.htsoft.oa.dao.prebusiness.PreBusinessDao;
 import com.htsoft.oa.model.prebusiness.PreBusiness;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -55,9 +58,9 @@ public class PrePreBusinessServiceImpl extends BaseServiceImpl<PreBusiness> impl
             month = now.get(Calendar.MONTH) + 1;
         }
         // 解决拿号顺序不连续问题，避免号重复。如：序号到38了，但是实际只拿了24个
-        // TODO 基数要根据实际情况修改，只有2017才需要加
+        // 只有2017才需要加
         if(year == 2017) {
-            baseCount = 4;
+            baseCount = Integer.parseInt(GlobalConfig.getValue("pre_business_base_count"));
         }
         // 拿号日期内的报告总数
         String hql = "select count(*) from pre_business as b where b.nhrq LIKE ?";
@@ -67,5 +70,26 @@ public class PrePreBusinessServiceImpl extends BaseServiceImpl<PreBusiness> impl
         baogaoId = baogaoId.replaceAll("M", StringUtil.lfill(month, 2));
         baogaoId = baogaoId.replaceAll("I", StringUtil.lfill(baseCount + count + 1, 3));
         return baogaoId;
+    }
+
+    public PreBusiness getByCode(HttpServletRequest request, String code) {
+        QueryFilter filter = new QueryFilter(request);
+        filter.addFilter("Q_code_S_EQ", code);
+        PreBusiness business = null;
+        List<PreBusiness> list = this.getAll(filter);
+        if(!list.isEmpty()) {
+            business = list.get(0);
+        }
+        return business;
+    }
+
+    @Override
+    public boolean setIsReport(HttpServletRequest request, String code, boolean isReport) {
+        PreBusiness preBusiness = getByCode(request, code);
+        if(preBusiness != null) {
+            String is = isReport?"是":"否";
+            preBusiness.setIsReport(is);
+        }
+        return false;
     }
 }

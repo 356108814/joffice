@@ -376,8 +376,8 @@ RealtyView = Ext.extend(Ext.Panel, {
 		});
 		//权限控制
 		validateAll();
-		//判断管理权限,13列为管理
-		this.gridPanel.getColumnModel().setHidden(13,!isHasRight('manage_column'));
+		//判断管理权限,14列为管理
+		this.gridPanel.getColumnModel().setHidden(14,!isHasRight('manage_column'));
 		
 	},// end of the initComponents()
 

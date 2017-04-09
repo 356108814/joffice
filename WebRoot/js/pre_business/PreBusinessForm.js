@@ -46,7 +46,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
             defaultType: 'textfield',
             items: [{
                 name: 'business.id',
-                id: 'businessForm.id',
+                id: 'preBusinessForm.id',
                 xtype: 'hidden',
                 value: this.id
             }, {
@@ -62,7 +62,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                     name: 'business.code',
                     width: 300,
                     xtype: 'textfield',
-                    id: 'businessForm.code',
+                    id: 'preBusinessForm.code',
                     allowBlank: false,
                     blankText: '报告编号不能为空!'
                 },
@@ -73,7 +73,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                     },
                     {
                         name: 'business.ym',
-                        id: 'businessForm.ym',
+                        id: 'preBusinessForm.ym',
                         xtype: 'datefield',
                         allowBlank: false,
                         format: 'Y-m',
@@ -103,7 +103,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                     items: [{
                         fieldLabel: '拿号日期',
                         name: 'business.nhrq',
-                        id: 'businessForm.nhrq',
+                        id: 'preBusinessForm.nhrq',
                         xtype: 'datefield',
                         allowBlank: false,
                         value: new Date(),
@@ -111,14 +111,14 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                     }, {
                         fieldLabel: '委托单位',
                         name: 'business.weituo',
-                        id: 'businessForm.weituo',
-                        allowBlank: false
+                        id: 'preBusinessForm.weituo',
+                        allowBlank: true
                     },
                         {
                             fieldLabel: '评估对象',
                             name: 'business.pgdx',
-                            id: 'businessForm.pgdx',
-                            allowBlank: false,
+                            id: 'preBusinessForm.pgdx',
+                            allowBlank: true,
                             xtype: 'combo',
                             mode: 'local',
                             editable: false,
@@ -130,8 +130,8 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                         {
                             fieldLabel: '评估总值（元）',
                             name: 'business.pgzz',
-                            id: 'businessForm.pgzz',
-                            allowBlank: false,
+                            id: 'preBusinessForm.pgzz',
+                            allowBlank: true,
                             xtype: 'numberfield'
                         }]
                 },
@@ -146,8 +146,8 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                         items: [{
                             fieldLabel: '业务主办',
                             name: 'business.ywzb',
-                            id: 'businessForm.ywzb',
-                            allowBlank: false,
+                            id: 'preBusinessForm.ywzb',
+                            allowBlank: true,
                             xtype: 'lovcombo',
                             mode: 'local',
                             editable: false,
@@ -159,7 +159,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                         {
                             fieldLabel: '签字评估师',
                             name: 'business.qzpgs',
-                            id: 'businessForm.qzpgs',
+                            id: 'preBusinessForm.qzpgs',
                             xtype: 'lovcombo',
                             mode: 'local',
                             editable: false,
@@ -171,7 +171,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                         {
                             fieldLabel: '盖章日期',
                             name: 'business.gzrq',
-                            id: 'businessForm.gzrq',
+                            id: 'preBusinessForm.gzrq',
                             xtype: 'datefield',
                             format: 'Y-m-d'
                         },
@@ -179,7 +179,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                             fieldLabel: '录入人',
                             name: 'business.realName',
                             readOnly: true,
-                            id: 'businessForm.realName'
+                            id: 'preBusinessForm.realName'
                         }]
                     }, {
                         xtype: 'container',
@@ -204,7 +204,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                             fieldLabel: '备注',
                             name: 'business.beizhu',
                             xtype: 'textarea',
-                            id: 'businessForm.beizhu'
+                            id: 'preBusinessForm.beizhu'
                         }]
 
                     }]
@@ -246,14 +246,14 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                     var res = Ext.util.JSON.decode(response.responseText).data;
                     if (res.nhrq != '' && res.nhrq != null) {
                         var nhrq = getDateFromFormat(res.nhrq, 'yyyy-MM-dd HH:mm:ss');
-                        Ext.getCmp('businessForm.nhrq').setValue(new Date(nhrq));
+                        Ext.getCmp('preBusinessForm.nhrq').setValue(new Date(nhrq));
                     }
                     if (res.gzrq != '' && res.gzrq != null) {
                         var gzrq = getDateFromFormat(res.gzrq, 'yyyy-MM-dd HH:mm:ss');
-                        Ext.getCmp('businessForm.gzrq').setValue(new Date(gzrq));
+                        Ext.getCmp('preBusinessForm.gzrq').setValue(new Date(gzrq));
                     }
-                    Ext.getCmp('businessForm.ywzb').setValue(res.ywzb);
-                    Ext.getCmp('businessForm.qzpgs').setValue(res.qzpgs);
+                    Ext.getCmp('preBusinessForm.ywzb').setValue(res.ywzb);
+                    Ext.getCmp('preBusinessForm.qzpgs').setValue(res.qzpgs);
                 },
                 failure: function (response, options) {
                     Ext.Msg.alert('Error', response.failureType + "==" + response.responseText);
@@ -263,7 +263,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
 
         //生成新的报告编号
         if (this.id == null || this.id == 'undefined') {
-            var date = Ext.getCmp('businessForm.ym').getValue();
+            var date = Ext.getCmp('preBusinessForm.ym').getValue();
             me.getNewBaogaoId(date);
         }
 
@@ -319,7 +319,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
             root: 'data',
             success: function (response, options) {
                 var baogaoId = Ext.util.JSON.decode(response.responseText).data;
-                Ext.getCmp('businessForm.code').setValue(baogaoId);
+                Ext.getCmp('preBusinessForm.code').setValue(baogaoId);
             }
         })
     }

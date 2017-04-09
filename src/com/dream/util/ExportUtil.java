@@ -1,9 +1,6 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package com.dream.util;
+
+import org.apache.poi.hssf.usermodel.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,120 +9,110 @@ import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
+/**
+ * 导出工具类
+ */
 public class ExportUtil {
-  public ExportUtil() {
-  }
-
-  public static void ExportXls(List paramList, OutputStream paramOutputStream, String fieldParamString, String titleParamString) {
-    HSSFWorkbook localHSSFWorkbook = new HSSFWorkbook();
-    HSSFSheet localHSSFSheet = localHSSFWorkbook.createSheet("sheet1");
-    HSSFRow localHSSFRow = localHSSFSheet.createRow(0);
-    HSSFCell localHSSFCell = null;
-    HSSFCellStyle localCellStyle = localHSSFWorkbook.createCellStyle();
-    localCellStyle.setAlignment((short)1);
-    localCellStyle.setAlignment((short)2);
-    HSSFFont localFont = localHSSFWorkbook.createFont();
-    localFont.setBoldweight((short)700);
-    localCellStyle.setFont(localFont);
-    String[] arrayOfString1 = titleParamString.split(",");
-
-    for(int localIOException = 0; localIOException < arrayOfString1.length; ++localIOException) {
-      localHSSFCell = localHSSFRow.createCell(localIOException);
-      localHSSFCell.setCellStyle(localCellStyle);
-      localHSSFCell.setCellValue(arrayOfString1[localIOException]);
+    public ExportUtil() {
     }
 
-    if(paramList != null && paramList.size() > 0) {
-      localCellStyle = localHSSFWorkbook.createCellStyle();
-      localCellStyle.setAlignment((short)1);
-      localCellStyle.setAlignment((short)2);
-      localFont = localHSSFWorkbook.createFont();
-      localFont.setBoldweight((short)400);
-      localCellStyle.setFont(localFont);
-      String[] var17 = fieldParamString.split(",");
-      String str = "";
+    public static void ExportXls(List dataList, OutputStream outputStream, String fields, String titles) {
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet localHSSFSheet = workbook.createSheet("sheet1");
+        HSSFRow row = localHSSFSheet.createRow(0);
+        HSSFCell cell = null;
+        HSSFCellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setAlignment((short) 1);
+        cellStyle.setAlignment((short) 2);
+        HSSFFont font = workbook.createFont();
+        font.setBoldweight((short) 700);
+        cellStyle.setFont(font);
+        String[] titleArray = titles.split(",");
 
-      for(int j = 0; j < paramList.size(); ++j) {
-        localHSSFRow = localHSSFSheet.createRow((short)j + 1);
-        Object localObject2 = paramList.get(j);
-
-        for(int k = 0; k < var17.length; ++k) {
-          str = getValue(var17[k], localObject2);
-          localHSSFCell = localHSSFRow.createCell(k);
-          localHSSFCell.setCellStyle(localCellStyle);
-          localHSSFCell.setCellValue(str);
-          localHSSFSheet.autoSizeColumn((short)k);
-          str = "";
+        for (int title = 0; title < titleArray.length; ++title) {
+            cell = row.createCell(title);
+            cell.setCellStyle(cellStyle);
+            cell.setCellValue(titleArray[title]);
         }
-      }
-    }
 
-    try {
-      localHSSFWorkbook.write(paramOutputStream);
-    } catch (IOException var16) {
-      var16.printStackTrace();
-    }
+        if (dataList != null && dataList.size() > 0) {
+            cellStyle = workbook.createCellStyle();
+            cellStyle.setAlignment((short) 1);
+            cellStyle.setAlignment((short) 2);
+            font = workbook.createFont();
+            font.setBoldweight((short) 400);
+            cellStyle.setFont(font);
+            String[] fieldArray = fields.split(",");
+            String str = "";
 
-  }
+            for (int j = 0; j < dataList.size(); ++j) {
+                row = localHSSFSheet.createRow((short) j + 1);
+                Object data = dataList.get(j);
 
-  public static String getValue(String paramString, Object paramObject) {
-    String str1 = "";
-    String str2 = "";
-    Object invokeObj = null;
-    Method localMethod = null;
-
-    try {
-      if(paramString.indexOf("javaRenderer") == -1) {
-        str2 = "get" + paramString.substring(0, 1).toUpperCase() + paramString.substring(1, paramString.length());
-        localMethod = paramObject.getClass().getMethod(str2, (Class[])null);
-        if(localMethod != null) {
-          String localIllegalAccessException = localMethod.getReturnType().getName();
-          invokeObj = localMethod.invoke(paramObject, (Object[])null);
-          if(localIllegalAccessException.indexOf("Date") != -1) {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-            if(invokeObj != null) {
-              str1 = df.format(invokeObj);
+                for (int k = 0; k < fieldArray.length; ++k) {
+                    str = getValue(fieldArray[k], data);
+                    cell = row.createCell(k);
+                    cell.setCellStyle(cellStyle);
+                    cell.setCellValue(str);
+                    localHSSFSheet.autoSizeColumn((short) k);
+                }
             }
-          } else if(localIllegalAccessException.indexOf("Interger") == -1 && localIllegalAccessException.indexOf("Float") == -1 && localIllegalAccessException.indexOf("Double") == -1 && localIllegalAccessException.indexOf("Long") == -1) {
-            if(localIllegalAccessException.indexOf("String") != -1) {
-              if(invokeObj == null) {
-                str1 = "";
-              } else {
-                str1 = String.valueOf(invokeObj);
-              }
+        }
+
+        try {
+            workbook.write(outputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static String getValue(String paramString, Object paramObject) {
+        String value = "";
+        String getMethodName = "";
+        Object invokeObj = null;
+        Method localMethod = null;
+
+        try {
+            if (!paramString.contains("javaRenderer")) {
+                getMethodName = "get" + paramString.substring(0, 1).toUpperCase() + paramString.substring(1, paramString.length());
+                localMethod = paramObject.getClass().getMethod(getMethodName, (Class[]) null);
+                if (localMethod != null) {
+                    String localIllegalAccessException = localMethod.getReturnType().getName();
+                    invokeObj = localMethod.invoke(paramObject, (Object[]) null);
+                    if (localIllegalAccessException.contains("Date")) {
+                        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                        if (invokeObj != null) {
+                            value = df.format(invokeObj);
+                        }
+                    } else if (!localIllegalAccessException.contains("Interger") && !localIllegalAccessException.contains("Float") && !localIllegalAccessException.contains("Double") && !localIllegalAccessException.contains("Long")) {
+                        if (localIllegalAccessException.contains("String")) {
+                            if (invokeObj == null) {
+                                value = "";
+                            } else {
+                                value = String.valueOf(invokeObj);
+                            }
+                        } else {
+                            value = String.valueOf(invokeObj);
+                        }
+                    } else if (invokeObj != null) {
+                        DecimalFormat df1 = (DecimalFormat) DecimalFormat.getInstance();
+                        df1.setGroupingSize(3);
+                        value = df1.format(invokeObj);
+                    } else {
+                        value = String.valueOf(0);
+                    }
+                }
             } else {
-              str1 = String.valueOf(invokeObj);
+                getMethodName = paramString.split("javaRenderer")[1];
+                localMethod = paramObject.getClass().getMethod(getMethodName, (Class<?>) null);
+                value = String.valueOf(localMethod.invoke(paramObject, (Object[]) null));
             }
-          } else if(invokeObj != null) {
-            DecimalFormat df1 = (DecimalFormat)DecimalFormat.getInstance();
-            df1.setGroupingSize(3);
-            str1 = df1.format(invokeObj);
-          } else {
-            str1 = String.valueOf(0);
-          }
+        } catch (SecurityException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
         }
-      } else {
-        str2 = paramString.split("javaRenderer")[1];
-        localMethod = paramObject.getClass().getMethod(str2, (Class[])null);
-        str1 = String.valueOf(localMethod.invoke(paramObject, (Object[])null));
-      }
-    } catch (SecurityException var8) {
-      var8.printStackTrace();
-    } catch (NoSuchMethodException var9) {
-      var9.printStackTrace();
-    } catch (InvocationTargetException var10) {
-      var10.printStackTrace();
-    } catch (IllegalAccessException var11) {
-      var11.printStackTrace();
-    }
 
-    return str1;
-  }
+        return value;
+    }
 }

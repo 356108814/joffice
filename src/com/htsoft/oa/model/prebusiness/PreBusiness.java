@@ -19,7 +19,7 @@ public class PreBusiness implements Serializable {
     private String qzpgs;
     private Date gzrq;
     private String ywzb;
-    private String isReport;
+    private String isReport = "否";
     private String realName;
     private String beizhu;
     private Date createDate;

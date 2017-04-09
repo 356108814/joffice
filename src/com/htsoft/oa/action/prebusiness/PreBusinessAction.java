@@ -1,21 +1,19 @@
 package com.htsoft.oa.action.prebusiness;
 
 import com.dream.util.CheckUtil;
-import com.dream.util.FileUtil;
 import com.dream.util.RightUtil;
 import com.htsoft.core.command.QueryFilter;
 import com.htsoft.core.util.BeanUtil;
 import com.htsoft.core.util.ContextUtil;
 import com.htsoft.core.util.JsonUtil;
 import com.htsoft.core.web.action.BaseAction;
+import com.htsoft.oa.GlobalConfig;
 import com.htsoft.oa.model.prebusiness.PreBusiness;
 import com.htsoft.oa.model.system.AppUser;
 import com.htsoft.oa.service.prebusiness.PreBusinessService;
 import flexjson.JSONSerializer;
 
 import javax.annotation.Resource;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -82,13 +80,7 @@ public class PreBusinessAction extends BaseAction {
 
     public String getByCode() {
         String code = this.getRequest().getParameter("code");
-        QueryFilter filter = new QueryFilter(this.getRequest());
-        filter.addFilter("Q_code_S_EQ", code);
-        PreBusiness business = null;
-        List<PreBusiness> list  = this.preBusinessService.getAll(filter);
-        if(!list.isEmpty()) {
-            business = list.get(0);
-        }
+        PreBusiness business = this.preBusinessService.getByCode(this.getRequest(), code);
         JSONSerializer json = JsonUtil.getJSONSerializer("nhrq", "gzrq");
         String jsonBusiness = "{success:true, data:" + json.serialize(business) + "}";
         this.setJsonString(jsonBusiness);
@@ -168,15 +160,19 @@ public class PreBusinessAction extends BaseAction {
             }
         }
 
-        this.preBusinessService.reportToExcel(reportList, getSaveExcelPath());
-        this.jsonString = "{success:true, data:\'" + getExcelRelativePath() + "\'}";
+        String absExcelPath = GlobalConfig.getSaveExcelPath(this.getRequest());
+        String relExcelPath = GlobalConfig.getExcelRelativePath();
+        this.preBusinessService.reportToExcel(reportList, absExcelPath);
+        this.jsonString = "{success:true, data:\'" + relExcelPath + "\'}";
         return "success";
     }
 
     public String reportAll() {
         List<PreBusiness> reportList = this.preBusinessService.getAll();
-        this.preBusinessService.reportToExcel(reportList, getSaveExcelPath());
-        this.jsonString = "{success:true, data:\'" + getExcelRelativePath() + "\'}";
+        String absExcelPath = GlobalConfig.getSaveExcelPath(this.getRequest());
+        String relExcelPath = GlobalConfig.getExcelRelativePath();
+        this.preBusinessService.reportToExcel(reportList, absExcelPath);
+        this.jsonString = "{success:true, data:\'" + relExcelPath + "\'}";
         return "success";
     }
 
@@ -192,8 +188,10 @@ public class PreBusinessAction extends BaseAction {
             }
         }
 
-        this.preBusinessService.reportToExcel(reportList, getSaveExcelPath());
-        this.jsonString = "{success:true, data:\'" + getExcelRelativePath() + "\'}";
+        String absExcelPath = GlobalConfig.getSaveExcelPath(this.getRequest());
+        String relExcelPath = GlobalConfig.getExcelRelativePath();
+        this.preBusinessService.reportToExcel(reportList, absExcelPath);
+        this.jsonString = "{success:true, data:\'" + relExcelPath + "\'}";
         return "success";
     }
 
@@ -201,17 +199,4 @@ public class PreBusinessAction extends BaseAction {
         return "success";
     }
 
-    // excel相对路径
-    private String getExcelRelativePath() {
-        Path path = Paths.get("backup", "tmp", FileUtil.getTimeExcelName());
-        return path.toString();
-    }
-
-    // excel绝对路径
-    private String getSaveExcelPath() {
-        String webRootPath = this.getRequest().getSession().getServletContext().getRealPath("");
-        String excelPath = getExcelRelativePath();
-        Path path = Paths.get(webRootPath, excelPath);
-        return path.toString();
-    }
 }
