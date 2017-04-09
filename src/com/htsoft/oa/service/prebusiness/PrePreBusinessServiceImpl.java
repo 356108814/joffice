@@ -37,7 +37,7 @@ public class PrePreBusinessServiceImpl extends BaseServiceImpl<PreBusiness> impl
 
     /**
      * 生成规则固定格式+报告数量
-     * 穗和顺预字(Y)第0MI号 Y:2017 M:03 I:0001
+     * 穗和顺预字(Y)第0MI号 Y:2017 M:03 I:001
      * @param year 拿号年
      * @param month 拿号月份
      * @return 新报告号
@@ -65,7 +65,7 @@ public class PrePreBusinessServiceImpl extends BaseServiceImpl<PreBusiness> impl
         int count = ((BigInteger)object).intValue();
         baogaoId = tpl.replaceAll("Y", String.valueOf(year));
         baogaoId = baogaoId.replaceAll("M", StringUtil.lfill(month, 2));
-        baogaoId = baogaoId.replaceAll("I", StringUtil.lfill(baseCount + count + 1, 4));
+        baogaoId = baogaoId.replaceAll("I", StringUtil.lfill(baseCount + count + 1, 3));
         return baogaoId;
     }
 }

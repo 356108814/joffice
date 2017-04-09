@@ -104,12 +104,16 @@ RealtyForm = Ext.extend(Ext.Panel, {
                             anchor: '96%,96%'
                         },
                         items: [{
-                            fieldLabel: '数字编号',
-                            name: 'realty.myid',
-                            id: 'realtyForm.myid',
-                            allowBlank: false,
-                            blankText: '数字编号不能为空!',
-                            xtype: 'numberfield'
+                            fieldLabel: '初评号',
+                            name: 'realty.preCode',
+                            id: 'realtyForm.preCode',
+                            allowBlank: true,
+                            xtype: 'textfield',
+                            listeners: {
+                                blur: function (field) {
+                                    me.loadPreBusiness(field.getValue())
+                                }
+                            }
                         }, {
                             fieldLabel: '拿号日期',
                             name: 'realty.nhrq',
@@ -202,7 +206,7 @@ RealtyForm = Ext.extend(Ext.Panel, {
                                 name: 'realty.gjff',
                                 id: 'realtyForm.gjff',
                                 allowBlank: false,
-                                xtype: 'combo',
+                                xtype: 'lovcombo',
                                 mode: 'local',
                                 editable: false,
                                 valueField: 'realty.gjff',
@@ -568,7 +572,7 @@ RealtyForm = Ext.extend(Ext.Panel, {
                     }
 
                     //多选下拉框赋值
-                    var fields = ['ywzb', 'ywzl', 'xckc', 'qzpgs'];
+                    var fields = ['ywzb', 'ywzl', 'xckc', 'qzpgs', 'gjff'];
                     for (var i=0; i < fields.length; i++) {
                         var field = fields[i];
                         Ext.getCmp('realtyForm.' + field).setValue(res[field]);
@@ -643,5 +647,40 @@ RealtyForm = Ext.extend(Ext.Panel, {
                 Ext.getCmp('realtyForm.baogaoId').setValue(baogaoId);
             }
         })
+    },
+
+    /**
+     * 加载初评信息
+     * @param value 初评号
+     */
+    loadPreBusiness: function (value) {
+        if(value == '' || value == undefined) {
+            return;
+        }
+        this.formPanel.loadData({
+            method: 'POST',
+            deferredRender: false,
+            url: __ctxPath + '/preBusiness/getByCodePreBusiness.do',
+            root: 'data',
+            params: {'code':value},
+            success: function (response, options) {
+                var res = Ext.util.JSON.decode(response.responseText).data;
+                if(res) {
+                    var fields = ['weituo', 'pgzz', 'qzpgs', 'ywzb'];
+                    for (var i = 0; i < fields.length; i++) {
+                        var field = fields[i];
+                        Ext.getCmp('realtyForm.' + field).setValue(res[field]);
+                    }
+                    if (res.nhrq != '' && res.nhrq != null) {
+                        var nhrq = getDateFromFormat(res.nhrq, 'yyyy-MM-dd HH:mm:ss');
+                        Ext.getCmp('realtyForm.nhrq').setValue(new Date(nhrq));
+                    }
+                    if (res.gzrq != '' && res.gzrq != null) {
+                        var gzrq = getDateFromFormat(res.gzrq, 'yyyy-MM-dd HH:mm:ss');
+                        Ext.getCmp('realtyForm.gzrq').setValue(new Date(gzrq));
+                    }
+                }
+            }
+        });
     }
 });

@@ -109,12 +109,16 @@ BusinessForm = Ext.extend(Ext.Panel, {
                             anchor: '96%,96%'
                         },
                         items: [{
-                            fieldLabel: '数字编号',
-                            name: 'business.myid',
-                            id: 'businessForm.myid',
-                            allowBlank: false,
-                            blankText: '数字编号不能为空!',
-                            xtype: 'numberfield'
+                            fieldLabel: '初评号',
+                            name: 'business.preCode',
+                            id: 'businessForm.preCode',
+                            allowBlank: true,
+                            xtype: 'textfield',
+                            listeners: {
+                                blur: function (field) {
+                                    me.loadPreBusiness(field.getValue())
+                                }
+                            }
                         }, {
                             fieldLabel: '拿号日期',
                             name: 'business.nhrq',
@@ -643,5 +647,40 @@ BusinessForm = Ext.extend(Ext.Panel, {
                 Ext.getCmp('businessForm.baogaoId').setValue(baogaoId);
             }
         })
+    },
+
+    /**
+     * 加载初评信息
+     * @param value 初评号
+     */
+    loadPreBusiness: function (value) {
+        if(value == '' || value == undefined) {
+            return;
+        }
+        this.formPanel.loadData({
+            method: 'POST',
+            deferredRender: false,
+            url: __ctxPath + '/preBusiness/getByCodePreBusiness.do',
+            root: 'data',
+            params: {'code':value},
+            success: function (response, options) {
+                var res = Ext.util.JSON.decode(response.responseText).data;
+                if(res) {
+                    var fields = ['weituo', 'pgdx', 'pgzz', 'qzpgs', 'ywzb'];
+                    for (var i=0; i < fields.length; i++) {
+                        var field = fields[i];
+                        Ext.getCmp('businessForm.' + field).setValue(res[field]);
+                    }
+                    if (res.nhrq != '' && res.nhrq != null) {
+                        var nhrq = getDateFromFormat(res.nhrq, 'yyyy-MM-dd HH:mm:ss');
+                        Ext.getCmp('businessForm.nhrq').setValue(new Date(nhrq));
+                    }
+                    if (res.gzrq != '' && res.gzrq != null) {
+                        var gzrq = getDateFromFormat(res.gzrq, 'yyyy-MM-dd HH:mm:ss');
+                        Ext.getCmp('businessForm.gzrq').setValue(new Date(gzrq));
+                    }
+                }
+            }
+        });
     }
 });

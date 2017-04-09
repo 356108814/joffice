@@ -8,7 +8,6 @@ import com.htsoft.core.util.BeanUtil;
 import com.htsoft.core.util.ContextUtil;
 import com.htsoft.core.util.JsonUtil;
 import com.htsoft.core.web.action.BaseAction;
-import com.htsoft.oa.model.business.Business;
 import com.htsoft.oa.model.prebusiness.PreBusiness;
 import com.htsoft.oa.model.system.AppUser;
 import com.htsoft.oa.service.prebusiness.PreBusinessService;
@@ -81,13 +80,29 @@ public class PreBusinessAction extends BaseAction {
         return "success";
     }
 
+    public String getByCode() {
+        String code = this.getRequest().getParameter("code");
+        QueryFilter filter = new QueryFilter(this.getRequest());
+        filter.addFilter("Q_code_S_EQ", code);
+        PreBusiness business = null;
+        List<PreBusiness> list  = this.preBusinessService.getAll(filter);
+        if(!list.isEmpty()) {
+            business = list.get(0);
+        }
+        JSONSerializer json = JsonUtil.getJSONSerializer("nhrq", "gzrq");
+        String jsonBusiness = "{success:true, data:" + json.serialize(business) + "}";
+        this.setJsonString(jsonBusiness);
+        return "success";
+    }
+
+
     public String save() {
         AppUser currentUser = ContextUtil.getCurrentUser();
         this.business.setRealName(currentUser.getFullname());
         if (this.business.getId() == null) {
             this.preBusinessService.save(this.business);
         } else {
-            PreBusiness orgBusiness = this.preBusinessService.get((long) this.business.getId());
+            PreBusiness orgBusiness = this.preBusinessService.get(this.business.getId());
             try {
                 BeanUtil.copyNotNullProperties(orgBusiness, this.business);
                 if (this.business.getNhrq() == null) {
