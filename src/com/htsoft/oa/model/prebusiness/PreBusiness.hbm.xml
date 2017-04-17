@@ -71,13 +71,13 @@
                 <comment>注备</comment>
             </column>
         </property>
-        <property name="createDate" type="java.util.Date">
-            <column name="create_date">
+        <property name="createDate" type="java.util.Date" generated="insert">
+            <column name="create_date" default="CURRENT_TIMESTAMP" sql-type="timestamp">
                 <comment>创建日期</comment>
             </column>
         </property>
-        <property name="updateDate" type="java.util.Date">
-            <column name="update_date">
+        <property name="updateDate" type="java.util.Date" generated="always">
+            <column name="update_date" default="CURRENT_TIMESTAMP" sql-type="timestamp">
                 <comment>更新日期</comment>
             </column>
         </property>

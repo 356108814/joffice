@@ -74,7 +74,7 @@ public class RealtyServiceImpl extends BaseServiceImpl<Realty> implements Realty
         // 解决拿号顺序不连续问题，避免号重复。如：序号到38了，但是实际只拿了24个
         // 只有2017才需要加
         if(year == 2017) {
-            baseCount = Integer.parseInt(GlobalConfig.getValue("pre_business_base_count"));
+            baseCount = Integer.parseInt(GlobalConfig.getValue("realty_base_count"));
         }
         // 拿号日期内的报告总数
         String hql = "select count(*) from Realty as b where b.nhrq LIKE ?";

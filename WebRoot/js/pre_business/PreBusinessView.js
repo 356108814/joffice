@@ -109,8 +109,12 @@ PreBusinessView = Ext.extend(Ext.Panel, {
                         width: '90%',
                         fieldLabel: '评估对象',
                         name: 'Q_pgdx_S_LK',
-                        xtype: 'textfield',
-                        maxLength: 125
+                        maxLength: 125,
+                        xtype: 'combo',
+                        mode: 'local',
+                        editable: false,
+                        triggerAction: 'all',
+                        store: Data.pgdxArray
                     }]
                 }, {
                     columnWidth: .3,

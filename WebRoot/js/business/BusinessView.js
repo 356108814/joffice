@@ -119,6 +119,15 @@ BusinessView = Ext.extend(Ext.Panel, {
                         width: '90%',
                         fieldLabel: '评估对象',
                         name: 'Q_pgdx_S_LK',
+                        xtype: 'combo',
+                        mode: 'local',
+                        editable: false,
+                        triggerAction: 'all',
+                        store: Data.pgdxArray
+                    }, {
+                        width: '90%',
+                        fieldLabel: '初评编号',
+                        name: 'Q_preCode_S_LK',
                         xtype: 'textfield',
                         maxLength: 125
                     }]
@@ -197,11 +206,13 @@ BusinessView = Ext.extend(Ext.Panel, {
                 dataIndex: 'businessId',
                 hideable: false,
                 hidden: true
-            }, {
+            }, 
+             {
                 header: '数字编号',
                 dataIndex: 'myid',
                 width: 50
-            }, {
+            },
+            {
                 header: '拿号日期',
                 dataIndex: 'nhrq',
                 renderer: function (value) {
@@ -346,7 +357,6 @@ BusinessView = Ext.extend(Ext.Panel, {
             viewConfig: {
                 forceFit: true,
                 autoFill: true, // 自动填充
-                forceFit: true
                 // showPreview : false
             },
             bbar: new HT.PagingBar({store: this.store})
@@ -368,6 +378,7 @@ BusinessView = Ext.extend(Ext.Panel, {
         validateAll();
         //判断管理权限,14列为管理
         this.gridPanel.getColumnModel().setHidden(14, !isHasRight('manage_column'));
+        this.gridPanel.getColumnModel().setHidden(3, true);
 
     },// end of the initComponents()
 

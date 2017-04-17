@@ -86,11 +86,13 @@ public class BusinessAction extends BaseAction {
         Business saveBusiness;
         AppUser currentUser = ContextUtil.getCurrentUser();
         this.business.setUsername(currentUser.getFullname());
+        String newPreCode = this.business.getPreCode();
+        String oldPreCode = null;
         if (this.business.getBusinessId() == null) {
             saveBusiness = this.business;
         } else {
             saveBusiness = this.businessService.get(this.business.getBusinessId());
-
+            oldPreCode = saveBusiness.getPreCode();
             try {
                 BeanUtil.copyNotNullProperties(saveBusiness, this.business);
                 if (this.business.getNhrq() == null) {
@@ -120,9 +122,13 @@ public class BusinessAction extends BaseAction {
         this.businessService.save(saveBusiness);
 
         // 更新初评已出报告
-        String preCode = saveBusiness.getPreCode();
-        if(preCode != null && !Objects.equals(preCode, "")) {
-            preBusinessService.setIsReport(this.getRequest(), preCode, true);
+        if(newPreCode != null && !Objects.equals(newPreCode, "")) {
+            preBusinessService.setIsReport(this.getRequest(), newPreCode, true);
+        } else {
+            //删除初评号
+            if(oldPreCode != null && !Objects.equals(oldPreCode, "")) {
+                preBusinessService.setIsReport(this.getRequest(), oldPreCode, false);
+            }
         }
 
         this.setJsonString("{success:true}");

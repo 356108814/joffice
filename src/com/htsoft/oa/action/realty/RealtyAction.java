@@ -89,10 +89,13 @@ public class RealtyAction extends BaseAction {
         AppUser currentUser = ContextUtil.getCurrentUser();
         Realty saveRealty;
         this.realty.setUsername(currentUser.getFullname());
+        String newPreCode = this.realty.getPreCode();
+        String oldPreCode = null;
         if(this.realty.getBusinessId() == null) {
             saveRealty = this.realty;
         } else {
             saveRealty = this.realtyService.get(this.realty.getBusinessId());
+            oldPreCode = saveRealty.getPreCode();
 
             try {
                 BeanUtil.copyNotNullProperties(saveRealty, this.realty);
@@ -127,9 +130,13 @@ public class RealtyAction extends BaseAction {
         this.realtyService.save(saveRealty);
 
         // 更新初评已出报告
-        String preCode = saveRealty.getPreCode();
-        if(preCode != null && !Objects.equals(preCode, "")) {
-            preBusinessService.setIsReport(this.getRequest(), preCode, true);
+        if(newPreCode != null && !Objects.equals(newPreCode, "")) {
+            preBusinessService.setIsReport(this.getRequest(), newPreCode, true);
+        } else {
+            //删除初评号
+            if(oldPreCode != null && !Objects.equals(oldPreCode, "")) {
+                preBusinessService.setIsReport(this.getRequest(), oldPreCode, false);
+            }
         }
 
         this.setJsonString("{success:true}");
