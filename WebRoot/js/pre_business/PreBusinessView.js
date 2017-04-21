@@ -112,7 +112,7 @@ PreBusinessView = Ext.extend(Ext.Panel, {
                         maxLength: 125,
                         xtype: 'combo',
                         mode: 'local',
-                        editable: false,
+                        editable: true,
                         triggerAction: 'all',
                         store: Data.pgdxArray
                     }]

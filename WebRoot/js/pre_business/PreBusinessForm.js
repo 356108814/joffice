@@ -121,7 +121,7 @@ PreBusinessForm = Ext.extend(Ext.Panel, {
                             allowBlank: true,
                             xtype: 'combo',
                             mode: 'local',
-                            editable: false,
+                            editable: true,
                             valueField: 'business.pgdx',
                             displayField: 'business.pgdx',
                             triggerAction: 'all',

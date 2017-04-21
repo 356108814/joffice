@@ -121,7 +121,7 @@ BusinessView = Ext.extend(Ext.Panel, {
                         name: 'Q_pgdx_S_LK',
                         xtype: 'combo',
                         mode: 'local',
-                        editable: false,
+                        editable: true,
                         triggerAction: 'all',
                         store: Data.pgdxArray
                     }, {
