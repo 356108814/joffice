@@ -55,7 +55,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
 
     /**
      * 生成规则固定格式+报告数量
-     * 穗和顺资评字(Y)第0MI号 Y:2017 M:03 I:0001
+     * 穗和顺资字(Y)第0MI号 Y:2017 M:03 I:0001
      * @param year 拿号年
      * @param month 拿号月份
      * @return 新报告号
@@ -65,7 +65,7 @@ public class BusinessServiceImpl extends BaseServiceImpl<Business> implements Bu
         String baogaoId;
 
         int baseCount = 0;
-        String tpl = "穗和顺资评字(Y)第0MI号";
+        String tpl = "穗和顺资字(Y)第0MI号";
         if(year == 0) {
             // 默认使用当前时间
             Calendar now = Calendar.getInstance();

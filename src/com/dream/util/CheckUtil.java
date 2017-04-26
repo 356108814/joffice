@@ -17,13 +17,13 @@ public class CheckUtil {
     public static boolean isMyBusiness(Business business) {
         AppUser currentUser = ContextUtil.getCurrentUser();
         String fullname = currentUser.getFullname();
-        return business != null && (business.getUsername().equals(fullname) || business.getYwzb().contains(fullname) || business.getYwzl() != null && business.getYwzl().contains(fullname));
+        return business != null && (business.getUsername().equals(fullname) || business.getYwzb().contains(fullname) || (business.getYwzl() != null && business.getYwzl().contains(fullname)));
     }
 
     public static boolean isMyRealty(Realty realty) {
         AppUser currentUser = ContextUtil.getCurrentUser();
         String fullname = currentUser.getFullname();
-        return realty != null && (realty.getUsername().equals(fullname) || realty.getYwzb().contains(fullname) || realty.getYwzl() != null && realty.getYwzl().contains(fullname));
+        return realty != null && (realty.getUsername().equals(fullname) || realty.getYwzb().contains(fullname) || (realty.getYwzl() != null && realty.getYwzl().contains(fullname)));
     }
 
     public static boolean isMyPreBusiness(PreBusiness business) {

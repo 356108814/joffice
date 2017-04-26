@@ -267,25 +267,25 @@ RealtyForm = Ext.extend(Ext.Panel, {
                                 fieldLabel: '业务助理',
                                 name: 'realty.ywzl',
                                 id: 'realtyForm.ywzl',
-                                xtype: 'lovcombo',
-                                mode: 'local',
-                                editable: false,
+                                // xtype: 'lovcombo',
+                                // mode: 'local',
+                                editable: true,
                                 valueField: 'realty.ywzb',
-                                displayField: 'realty.ywzb',
-                                triggerAction: 'all',
-                                store: Data.employeeArray
+                                displayField: 'realty.ywzb'
+                                // triggerAction: 'all',
+                                // store: Data.employeeArray
                             },
                                 {
                                     fieldLabel: '现场勘查',
                                     name: 'realty.xckc',
                                     id: 'realtyForm.xckc',
-                                    xtype: 'lovcombo',
-                                    mode: 'local',
-                                    editable: false,
+                                    // xtype: 'lovcombo',
+                                    // mode: 'local',
+                                    editable: true,
                                     valueField: 'realty.xckc',
-                                    displayField: 'realty.xckc',
-                                    triggerAction: 'all',
-                                    store: Data.employeeArray
+                                    displayField: 'realty.xckc'
+                                    // triggerAction: 'all',
+                                    // store: Data.employeeArray
                                 },
                                 {
                                     fieldLabel: '初评日期',
@@ -300,7 +300,7 @@ RealtyForm = Ext.extend(Ext.Panel, {
                                     id: 'realtyForm.bgr',
                                     xtype: 'combo',
                                     mode: 'local',
-                                    editable: false,
+                                    editable: true,
                                     valueField: 'realty.bgr',
                                     displayField: 'realty.bgr',
                                     triggerAction: 'all',

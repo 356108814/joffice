@@ -238,25 +238,25 @@ BusinessForm = Ext.extend(Ext.Panel, {
                                 fieldLabel: '业务助理',
                                 name: 'business.ywzl',
                                 id: 'businessForm.ywzl',
-                                xtype: 'lovcombo',
-                                mode: 'local',
-                                editable: false,
+                                // xtype: 'lovcombo',
+                                // mode: 'local',
+                                editable: true,
                                 valueField: 'business.ywzb',
-                                displayField: 'business.ywzb',
-                                triggerAction: 'all',
-                                store: Data.employeeArray
+                                displayField: 'business.ywzb'
+                                // triggerAction: 'all',
+                                // store: Data.employeeArray
                             },
                                 {
                                     fieldLabel: '现场勘查',
                                     name: 'business.xckc',
                                     id: 'businessForm.xckc',
-                                    xtype: 'lovcombo',
-                                    mode: 'local',
-                                    editable: false,
+                                    // xtype: 'lovcombo',
+                                    // mode: 'local',
+                                    // editable: true,
                                     valueField: 'business.xckc',
-                                    displayField: 'business.xckc',
-                                    triggerAction: 'all',
-                                    store: Data.employeeArray
+                                    displayField: 'business.xckc'
+                                    // triggerAction: 'all',
+                                    // store: Data.employeeArray
                                 },
                                 {
                                     fieldLabel: '初评日期',
@@ -271,7 +271,7 @@ BusinessForm = Ext.extend(Ext.Panel, {
                                     id: 'businessForm.bgr',
                                     xtype: 'combo',
                                     mode: 'local',
-                                    editable: false,
+                                    editable: true,
                                     valueField: 'business.bgr',
                                     displayField: 'business.bgr',
                                     triggerAction: 'all',

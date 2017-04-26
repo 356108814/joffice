@@ -18,10 +18,7 @@ import javax.annotation.Resource;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 资产控制器
@@ -58,13 +55,40 @@ public class BusinessAction extends BaseAction {
         QueryFilter filter = new QueryFilter(this.getRequest());
         filter.addSorted("businessId", "DESC");
         List<Business> showList;
-        if (RightUtil.isCanListAll(currentUser.getUserId())) {
+        int totalCount = 0;
+//        List<Business> allList = this.businessService.getAll(filter);
+//        if (RightUtil.isCanListAll(currentUser.getUserId())) {
+//            showList = allList;
+//            totalCount = allList.size();
+//        } else {
+//            showList = new ArrayList<>();
+//            for (Business business: allList) {
+//                if (CheckUtil.isMyBusiness(business)) {
+//                    showList.add(business);
+//                }
+//            }
+//            totalCount = showList.size();
+//        }
+
+        if(RightUtil.isCanListAll(currentUser.getUserId())) {
             showList = this.businessService.getAll(filter);
         } else {
+            //先查主办，再查助理的，然后合并
             filter.addFilter("Q_ywzb_S_LK", currentUser.getFullname());
-            filter.addFilter("Q_ywzl_S_LK", currentUser.getFullname());
             showList = this.businessService.getAll(filter);
+            QueryFilter zlFilter = new QueryFilter(this.getRequest());
+            zlFilter.addFilter("Q_ywzl_S_LK", currentUser.getFullname());
+            List<Business> zlList = this.businessService.getAll(zlFilter);
+            int addSize = 0;
+            for (Business business: zlList) {
+                if(!showList.contains(business)) {
+                    showList.add(business);
+                    addSize++;
+                }
+            }
+            filter.getPagingBean().setTotalItems(filter.getPagingBean().getTotalItems() + addSize);
         }
+
         StringBuffer buffer = (new StringBuffer("{success:true,\'totalCounts\':"))
                 .append(filter.getPagingBean().getTotalItems()).append(",result:");
         JSONSerializer json = JsonUtil.getJSONSerializer("nhrq", "cprq", "gzrq", "sfrq", "cbgrq");

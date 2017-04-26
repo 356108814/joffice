@@ -112,7 +112,7 @@ function validateAll() {
 //是否有查看详细信息的权限
 function isHasViewDetailRight(data) {
     //有view_all权限、业务主办为自己、业务登记人为自己的可查看
-    if (isHasRight('view_all') || curUserInfo.userId == 4 || data.username == curUserInfo.fullname || data.ywzb.indexOf(curUserInfo.fullname) != -1 || data.ywzl.indexOf(curUserInfo.fullname) != -1) {
+    if (isHasRight('view_all') || curUserInfo.userId == 12 || data.username == curUserInfo.fullname || data.ywzb.indexOf(curUserInfo.fullname) != -1 || data.ywzl.indexOf(curUserInfo.fullname) != -1) {
         return true;
     }
     return false;

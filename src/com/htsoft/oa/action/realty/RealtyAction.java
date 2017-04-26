@@ -57,13 +57,32 @@ public class RealtyAction extends BaseAction {
         AppUser currentUser = ContextUtil.getCurrentUser();
         QueryFilter filter = new QueryFilter(this.getRequest());
         filter.addSorted("businessId", "DESC");
-        List showList;
+        List<Realty> showList;
+//        if(RightUtil.isCanListAll(currentUser.getUserId())) {
+//            showList = this.realtyService.getAll(filter);
+//        } else {
+//            filter.addFilter("Q_ywzb_S_LK", currentUser.getFullname());
+//            filter.addFilter("Q_ywzl_S_LK", currentUser.getFullname());
+//            showList = this.realtyService.getAll(filter);
+//        }
+
         if(RightUtil.isCanListAll(currentUser.getUserId())) {
             showList = this.realtyService.getAll(filter);
         } else {
+            //先查主办，再查助理的，然后合并
             filter.addFilter("Q_ywzb_S_LK", currentUser.getFullname());
-            filter.addFilter("Q_ywzl_S_LK", currentUser.getFullname());
             showList = this.realtyService.getAll(filter);
+            QueryFilter zlFilter = new QueryFilter(this.getRequest());
+            zlFilter.addFilter("Q_ywzl_S_LK", currentUser.getFullname());
+            List<Realty> zlList = this.realtyService.getAll(zlFilter);
+            int addSize = 0;
+            for (Realty realty : zlList) {
+                if(!showList.contains(realty)) {
+                    showList.add(realty);
+                    addSize++;
+                }
+            }
+            filter.getPagingBean().setTotalItems(filter.getPagingBean().getTotalItems() + addSize);
         }
 
         StringBuffer buffer = (new StringBuffer("{success:true,\'totalCounts\':"))
