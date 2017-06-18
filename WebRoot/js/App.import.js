@@ -909,5 +909,13 @@ App.importJs = {
     RealtyView: [
         __ctxPath + '/js/realty/RealtyView.js',
         __ctxPath + '/js/realty/RealtyForm.js'
+    ],
+
+    TenderForm: [
+        __ctxPath + '/js/tender/TenderForm.js'
+    ],
+    TenderView: [
+        __ctxPath + '/js/tender/TenderView.js',
+        __ctxPath + '/js/tender/TenderForm.js'
     ]
 };

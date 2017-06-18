@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="com.htsoft.oa.model.tender.Tender" table="tender" schema="joffice21">
+        <id name="id">
+            <column name="id" sql-type="bigint(11)"/>
+            <generator class="native" />
+        </id>
+        <property name="regdate">
+            <column name="regdate" sql-type="date" not-null="true"/>
+        </property>
+        <property name="company">
+            <column name="company" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="project">
+            <column name="project" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="code">
+            <column name="code" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="offer">
+            <column name="offer" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="sponsor">
+            <column name="sponsor" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="verifier">
+            <column name="verifier" sql-type="varchar(255)" not-null="true"/>
+        </property>
+        <property name="remark">
+            <column name="remark" sql-type="text" not-null="true"/>
+        </property>
+        <property name="createDate" generated="insert">
+            <column name="create_date" default="CURRENT_TIMESTAMP" sql-type="timestamp"/>
+        </property>
+        <property name="updateDate" generated="always">
+            <column name="update_date" default="CURRENT_TIMESTAMP" sql-type="timestamp"/>
+        </property>
+    </class>
+</hibernate-mapping>

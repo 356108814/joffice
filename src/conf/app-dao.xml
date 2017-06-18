@@ -57,6 +57,8 @@
 	<bean id="realtyDao" class="com.htsoft.oa.dao.realty.impl.RealtyDaoImpl" parent="baseDao"/>
 <!-- end:  Generated for Business From Template: app-dao.xml.beansvm  -->
 
+	<bean id="tenderDao" class="com.htsoft.oa.dao.tender.TenderDaoImpl" parent="baseDao"/>
+
 <!-- start:  Generated for MailFolder From Template: app-dao.xml.beansvm  -->
 	<bean id="mailFolderDao" class="com.htsoft.oa.dao.communicate.impl.MailFolderDaoImpl" parent="baseDao"/>
 <!-- end:  Generated for MailFolder From Template: app-dao.xml.beansvm  -->

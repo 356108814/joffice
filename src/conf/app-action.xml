@@ -44,7 +44,8 @@
 	<!-- start:  Generated for Realty From Template: app-action.xml.beansvm  -->
 	<bean id="RealtyAction" class="com.htsoft.oa.action.realty.RealtyAction" scope="prototype"/>
 	<!-- end:  Generated for Business From Template: app-action.xml.beansvm  -->
-	
+
+	<bean id="TenderAction" class="com.htsoft.oa.action.TenderAction" scope="prototype"/>
 	
 	<!-- start:  Generated for MailFolder From Template: app-action.xml.beansvm  -->
 	<bean id="MailFolderAction" class="com.htsoft.oa.action.communicate.MailFolderAction" scope="prototype"/>

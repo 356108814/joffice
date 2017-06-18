@@ -125,7 +125,11 @@
 		<constructor-arg index="0" ref="realtyDao"/>
 	</bean>
 	<!-- end:  Generated for Business From Template: app-service.xml.beansvm  -->
-	
+
+	<bean id="tenderService" class="com.htsoft.oa.service.tender.TenderServiceImpl">
+		<constructor-arg index="0" ref="tenderDao"/>
+	</bean>
+
 	<!-- start:  Generated for MailFolder From Template: app-service.xml.beansvm  -->
 	<bean id="mailFolderService" class="com.htsoft.oa.service.communicate.impl.MailFolderServiceImpl">
 		<constructor-arg index="0" ref="mailFolderDao"/>

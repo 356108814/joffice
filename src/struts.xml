@@ -186,6 +186,12 @@
 			<result>${successResultValue}</result>
 		</action>
 	</package>
+
+	<package name="tender" extends="struts-default" namespace="/tender">
+		<action name="*Tender" class="TenderAction" method="{1}">
+			<result>${successResultValue}</result>
+		</action>
+	</package>
 	
 	<package name="document" extends="struts-default" namespace="/document">
 		<action name="*DocFolder" class="DocFolderAction" method="{1}">
